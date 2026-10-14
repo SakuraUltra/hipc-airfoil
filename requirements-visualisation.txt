@@ -1,0 +1,3 @@
+# Optional: core build/validation/benchmark tools require no Python packages.
+numpy>=1.24
+matplotlib>=3.7

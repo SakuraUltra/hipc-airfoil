@@ -1,0 +1,11 @@
+backend,workers,wall_seconds,speedup_vs_own_one_worker,parallel_efficiency,nx,ny,samples,source_log,evidence
+openmp,1,332.667,1.0,1.0,1024,256,1,omp_scaling_27579401.out,historical archived implementation; not maintained-code benchmark
+openmp,2,175.806,1.8922391727244807,0.9461195863622404,1024,256,1,omp_scaling_27579401.out,historical archived implementation; not maintained-code benchmark
+openmp,4,89.735,3.7072156906446763,0.9268039226611691,1024,256,1,omp_scaling_27579401.out,historical archived implementation; not maintained-code benchmark
+openmp,8,55.545,5.989143937348096,0.748642992168512,1024,256,1,omp_scaling_27579401.out,historical archived implementation; not maintained-code benchmark
+openmp,16,34.389,9.673645642501963,0.6046028526563727,1024,256,1,omp_scaling_27579401.out,historical archived implementation; not maintained-code benchmark
+mpi,1,417.738,1.0,1.0,1024,256,1,mpi_scaling_27437194.out,historical archived implementation; not maintained-code benchmark
+mpi,2,214.875,1.9440977312390926,0.9720488656195463,1024,256,1,mpi_scaling_27437194.out,historical archived implementation; not maintained-code benchmark
+mpi,4,110.360,3.7852301558535704,0.9463075389633926,1024,256,1,mpi_scaling_27437194.out,historical archived implementation; not maintained-code benchmark
+mpi,8,58.958,7.085348892431901,0.8856686115539876,1024,256,1,mpi_scaling_27437194.out,historical archived implementation; not maintained-code benchmark
+mpi,16,31.535,13.246805137149199,0.8279253210718249,1024,256,1,mpi_scaling_27437194.out,historical archived implementation; not maintained-code benchmark

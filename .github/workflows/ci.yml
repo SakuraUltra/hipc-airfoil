@@ -1,0 +1,81 @@
+name: Build and validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cpu:
+    name: CPU and MPI (${{ matrix.compiler }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install CPU toolchains
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang libomp-dev openmpi-bin libopenmpi-dev
+      - name: Build clean CPU and MPI executables
+        run: |
+          make -j2 cpu mpi CC=${{ matrix.compiler }}
+          make info CC=${{ matrix.compiler }}
+      - name: Comparator negative controls
+        run: python3 -m unittest discover -s tests -v
+      - name: Numerical, checkpoint and CLI regressions
+        run: python3 scripts/validate.py --mpi required --cuda skip --mpirun-arg=--oversubscribe --output-dir benchmarks/results/ci-${{ matrix.compiler }}
+      - name: Address and undefined-behaviour sanitizers
+        if: matrix.compiler == 'gcc'
+        run: |
+          make -j2 serial BUILD_DIR=build/sanitized CC=gcc CFLAGS='-O1 -g -std=c11 -Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer'
+          make info BUILD_DIR=build/sanitized CC=gcc CFLAGS='-O1 -g -std=c11 -Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer'
+          python3 scripts/validate.py --build-dir build/sanitized --backends serial serial-opt --mpi skip --cuda skip --output-dir benchmarks/results/ci-sanitized
+      - name: Retain validation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: validation-${{ matrix.compiler }}
+          path: |
+            benchmarks/results/ci-*/report.json
+            benchmarks/results/ci-*/**/comparisons.json
+            benchmarks/results/ci-*/**/process.stderr.txt
+            build/build-info.json
+            build/sanitized/build-info.json
+          retention-days: 7
+
+  cuda-compile:
+    name: CUDA compile only (no GPU runtime)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container: nvidia/cuda:12.8.1-devel-ubuntu22.04
+    steps:
+      - name: Install host build tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git make gcc g++ ca-certificates python3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Compile CUDA kernels and link executable
+        run: |
+          nvcc --version
+          make -j2 cuda
+          ./build/airfoil_cuda --help
+          make info
+      - name: Retain CUDA build metadata
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: cuda-compile-metadata
+          path: build/build-info.json
+          retention-days: 7
