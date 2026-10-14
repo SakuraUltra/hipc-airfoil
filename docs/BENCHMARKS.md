@@ -2,10 +2,28 @@
 
 ## Two separate evidence sets
 
-`benchmarks/historical/` contains redacted archival logs and CSV summaries of
-those logs. They describe earlier archived implementation code, not the maintained commit.
+`benchmarks/historical/` contains archival logs, original run/build configurations,
+profiles and CSV summaries. Its [index](../benchmarks/historical/README.md)
+retains all four available CPU scaling campaigns, including the earlier runs
+with different elapsed times. They describe earlier archived implementation
+code, not the maintained commit. Each campaign remains separate; the two CSV
+files must not be pooled into repeated-run statistics.
 The OpenMP and MPI one-worker baselines differ. No confidence intervals or
 multi-node result can be inferred from these single observations.
+
+The manifest records original archive hashes, retained hashes and explicit
+privacy edits. Numerical timing and solver-output values are preserved.
+`python3 scripts/check_historical.py` checks the retained files and recalculates
+CSV values from their source logs. It never updates hashes or rewrites evidence.
+Historical files are an append-only evidence set: preserve existing observations
+when adding a new campaign or correcting a derived interpretation.
+
+OpenMP's retained primary launch script includes final VTK output, while the
+archived MPI script requests `-n` and pipes stdout through `tee`. Exact compiler
+versions, hardware models, binary hashes and original placement were not
+recorded. Retained Makefiles describe intended builds and do not prove which
+binary generated a historical log. These gaps prevent treating the archived
+CPU/GPU runs as one controlled cross-backend benchmark.
 
 The archived CUDA `46290.664 ms` interval begins after initial upload and ends
 before final download/output. It includes host-driven convergence work and is
@@ -37,6 +55,14 @@ or timed-out process. It never fabricates a result for a missing backend.
    cross-backend comparison explicitly select one common maintained serial run.
    Do not mix the historical and current implementations or combine runs from
    different hardware to estimate a new “measured” speedup.
+
+For cluster optimisation decisions, run both implementations on the same target
+cluster node with the same workload and allocation. Mac correctness and short
+timing checks do not determine which implementation is faster on that cluster.
+When comparing machines, also match solver version, timestep policy, end time,
+worker count and output settings; changing the compiler or runtime must be
+reported as part of the configuration. Preserve the historical 1024×256,
+2098-step observations alongside any new campaign, even when new results differ.
 
 ```sh
 python3 scripts/benchmark.py --backend openmp openmp-opt --workers 1 2 4 8 \
@@ -84,5 +110,5 @@ python3 -m venv .venv
 ```
 
 Only plotting needs NumPy/Matplotlib. It selects one staggered component and
-plots its own coordinate locations; the optional outline follows the teaching
+plots its own coordinate locations; the optional outline follows the archived
 geometry. This image is illustrative and is not a CFD accuracy claim.

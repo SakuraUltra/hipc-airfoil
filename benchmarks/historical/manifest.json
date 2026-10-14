@@ -1,0 +1,478 @@
+{
+  "schema_version": 1,
+  "scope": "Small historical text evidence; earlier implementations, not maintained-code performance measurements",
+  "preservation_policy": "Retain original observations and timing boundaries. Only listed privacy metadata edits are applied. New runs must use separate directories and must not overwrite this archive.",
+  "unknown_historical_metadata": [
+    "CPU model",
+    "GPU model",
+    "compiler versions",
+    "binary hashes",
+    "exact binary-to-source correspondence",
+    "thread/rank placement"
+  ],
+  "campaign_policy": "Each scaling log is an independent campaign with one observation per worker. Do not pool campaigns or use their ratios as a shared serial baseline.",
+  "files": [
+    {
+      "path": "additional/mpi_test_27232003.out",
+      "category": "scaling-wall-time",
+      "archive_path": "airfoil_mpi03/mpi_test_27232003.out",
+      "archive_sha256": "eb071a3c170ba5e283f314c467b2ccfe3cc67ac61083675ca865fd53723ca1a0",
+      "archive_size_bytes": 11819,
+      "sha256": "3174989c96fc26e0e4c5d389900827f71f11c6fcfa0fcf6a1016a818f97376c9",
+      "size_bytes": 11735,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "additional/strong_scaling_27404398.out",
+      "category": "scaling-wall-time",
+      "archive_path": "airfoil_omp/logs/strong_scaling_27404398.out",
+      "archive_sha256": "5202bb4bea29b13c65e9e43429cbcd8da43c85c4ccbb549746704a19cd88d6ea",
+      "archive_size_bytes": 11170,
+      "sha256": "020c8cc0ad87b46cde580949c7325cd840e456f204baf8a4078cf108b9dbcb83",
+      "size_bytes": 11086,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "additional_scaling.csv",
+      "category": "derived-summary",
+      "sha256": "841af2aadf5fd83990086d9fbd4a05f500fef10ea35b937c79572b5c8864f740",
+      "size_bytes": 1679,
+      "derived_from": "source_log column; one observation per worker per campaign",
+      "privacy_edits": []
+    },
+    {
+      "path": "build-config/cuda/Makefile",
+      "category": "build-config",
+      "archive_path": "airfoil-cuda/Makefile",
+      "archive_sha256": "92283afab561540ea8c3aa37cd464125449b7fb32e0628abfff842f75be88f67",
+      "archive_size_bytes": 696,
+      "sha256": "92283afab561540ea8c3aa37cd464125449b7fb32e0628abfff842f75be88f67",
+      "size_bytes": 696,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "build-config/mpi/Makefile",
+      "category": "build-config",
+      "archive_path": "airfoil_mpi03/Makefile",
+      "archive_sha256": "fc4c765f0147ccb569662becf3e8e719a80030bcc66bc2a4c7e39e1d0cf8f3a2",
+      "archive_size_bytes": 394,
+      "sha256": "fc4c765f0147ccb569662becf3e8e719a80030bcc66bc2a4c7e39e1d0cf8f3a2",
+      "size_bytes": 394,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "build-config/mpi/Makefile.mpi",
+      "category": "build-config",
+      "archive_path": "airfoil_mpi03/Makefile.mpi",
+      "archive_sha256": "1cc13525cc2e3b3485e4831875e4331151fc016041f7dc3b51ed01273c33f3fd",
+      "archive_size_bytes": 405,
+      "sha256": "1cc13525cc2e3b3485e4831875e4331151fc016041f7dc3b51ed01273c33f3fd",
+      "size_bytes": 405,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "build-config/openmp/Makefile",
+      "category": "build-config",
+      "archive_path": "airfoil_omp/Makefile",
+      "archive_sha256": "11aab3fa99b29c578aa5144e4bedb4d0fb6dade167b19b3d15b8df14b4dfa27b",
+      "archive_size_bytes": 421,
+      "sha256": "11aab3fa99b29c578aa5144e4bedb4d0fb6dade167b19b3d15b8df14b4dfa27b",
+      "size_bytes": 421,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "build-config/serial/Makefile",
+      "category": "build-config",
+      "archive_path": "airfoil/Makefile",
+      "archive_sha256": "fc4c765f0147ccb569662becf3e8e719a80030bcc66bc2a4c7e39e1d0cf8f3a2",
+      "archive_size_bytes": 394,
+      "sha256": "fc4c765f0147ccb569662becf3e8e719a80030bcc66bc2a4c7e39e1d0cf8f3a2",
+      "size_bytes": 394,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "build-config/serial/Makefile.opt",
+      "category": "build-config",
+      "archive_path": "airfoil/Makefile.opt",
+      "archive_sha256": "78e6c418d936fa5d31263dd61adea327002c248eec9c7ec7bab805aaa740e134",
+      "archive_size_bytes": 431,
+      "sha256": "78e6c418d936fa5d31263dd61adea327002c248eec9c7ec7bab805aaa740e134",
+      "size_bytes": 431,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "cuda_steps.txt",
+      "category": "cuda-event-interval",
+      "archive_path": "airfoil-cuda/output/cuda_steps.txt",
+      "archive_sha256": "7de32b3dd82a5d709df26362978c173ef9df75f5115a442365c5bb42ae07a728",
+      "archive_size_bytes": 1897,
+      "sha256": "7de32b3dd82a5d709df26362978c173ef9df75f5115a442365c5bb42ae07a728",
+      "size_bytes": 1897,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/mpi_16proc.log",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/mpi_16proc.log",
+      "archive_sha256": "7fba9cf51757dab28fc4a0b5da420e98d1b2f39aa64dfa2ea76ceb4887032088",
+      "archive_size_bytes": 2037,
+      "sha256": "7fba9cf51757dab28fc4a0b5da420e98d1b2f39aa64dfa2ea76ceb4887032088",
+      "size_bytes": 2037,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/mpi_1proc.log",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/mpi_1proc.log",
+      "archive_sha256": "9661f206a4cc2e4b92d9a16939cddd16e9c3fe18685851ecf4e73245970a07b4",
+      "archive_size_bytes": 2038,
+      "sha256": "9661f206a4cc2e4b92d9a16939cddd16e9c3fe18685851ecf4e73245970a07b4",
+      "size_bytes": 2038,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/mpi_2proc.log",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/mpi_2proc.log",
+      "archive_sha256": "3a1736130453fa0fa817cac4494544b9977a222f2b5c1daec7e2ca9ab3c5ec9f",
+      "archive_size_bytes": 2037,
+      "sha256": "3a1736130453fa0fa817cac4494544b9977a222f2b5c1daec7e2ca9ab3c5ec9f",
+      "size_bytes": 2037,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/mpi_4proc.log",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/mpi_4proc.log",
+      "archive_sha256": "37ac64a5e6b7c16edef5f89816c17cbb0d6e3b6e5eba254387259da45ae5619f",
+      "archive_size_bytes": 2037,
+      "sha256": "37ac64a5e6b7c16edef5f89816c17cbb0d6e3b6e5eba254387259da45ae5619f",
+      "size_bytes": 2037,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/mpi_8proc.log",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/mpi_8proc.log",
+      "archive_sha256": "167b7eb796d78ef75816ee879ec58de361e95cb94fd36ea07bf0aa0080643c27",
+      "archive_size_bytes": 2037,
+      "sha256": "167b7eb796d78ef75816ee879ec58de361e95cb94fd36ea07bf0aa0080643c27",
+      "size_bytes": 2037,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/vtk_27432663.out",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/vtk_27432663.out",
+      "archive_sha256": "1184d62234d2fc7f0effd0b193a2a40711fea06266bd1763bd7996fb2d616da2",
+      "archive_size_bytes": 26595,
+      "sha256": "ea8ff7b1dc0c5fae6bfc6bfec27ccdb661e33410951d21f5b9e2a14ca734bdc9",
+      "size_bytes": 26511,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/vtk_27433470.out",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/vtk_27433470.out",
+      "archive_sha256": "99d08007ac73b9bf04055c8d4f626e01f0ab0b5903452373da07c034a4f2638a",
+      "archive_size_bytes": 2678,
+      "sha256": "b8f8ceb63734e44ecc5a7f9f95a90813b58a4d273228d4ee2b4ff54206ef0b92",
+      "size_bytes": 2594,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/mpi/vtk_27433475.out",
+      "category": "diagnostics",
+      "archive_path": "airfoil_mpi03/logs/vtk_27433475.out",
+      "archive_sha256": "b39b1bf7e8d80b865476719fd46fb607030d06bfea33f513bb093d96db26d796",
+      "archive_size_bytes": 2678,
+      "sha256": "87afc212d34897921ac4ecc30d55e37fc4ecf0da6a90dc5ed3f57192085f4d11",
+      "size_bytes": 2594,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/fast_1.txt",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/output_txt/fast_1.txt",
+      "archive_sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "archive_size_bytes": 1889,
+      "sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "size_bytes": 1889,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/fast_16.txt",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/output_txt/fast_16.txt",
+      "archive_sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "archive_size_bytes": 1889,
+      "sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "size_bytes": 1889,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/fast_2.txt",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/output_txt/fast_2.txt",
+      "archive_sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "archive_size_bytes": 1889,
+      "sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "size_bytes": 1889,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/fast_4.txt",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/output_txt/fast_4.txt",
+      "archive_sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "archive_size_bytes": 1889,
+      "sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "size_bytes": 1889,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/fast_8.txt",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/output_txt/fast_8.txt",
+      "archive_sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "archive_size_bytes": 1889,
+      "sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "size_bytes": 1889,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/omp_optimized_1thread.txt",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/output_txt/omp_optimized_1thread.txt",
+      "archive_sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "archive_size_bytes": 1889,
+      "sha256": "14a41a7463d037769a050fc70ef048f2d11de30687a6e6dcbf86e4244e63cb02",
+      "size_bytes": 1889,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/vtk_27405764.out",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/logs/vtk_27405764.out",
+      "archive_sha256": "7a88cd3e5d27b0122eda36589bad165c5b948a5a5387d69ea526289a9f9b42a4",
+      "archive_size_bytes": 2486,
+      "sha256": "282d1adc46f07e47d571c70d6c6c00c8954f5be8df70da2cf84c790a21ebccad",
+      "size_bytes": 2402,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "diagnostics/openmp/vtk_27406436.out",
+      "category": "diagnostics",
+      "archive_path": "airfoil_omp/logs/vtk_27406436.out",
+      "archive_sha256": "30f0b953c6e343f92044d9d3af9af892109a806a76e730238b72e9d95e214b7c",
+      "archive_size_bytes": 2487,
+      "sha256": "67135697904d4a237aa61f94dee97432942fc796278be7e13d148a04cf3bc390",
+      "size_bytes": 2403,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "mpi_scaling_27437194.out",
+      "category": "scaling-wall-time",
+      "archive_path": "airfoil_mpi03/mpi_scaling_27437194.out",
+      "archive_sha256": "49259a8f301252c1cffaae2aca19520961cbfa4f212ee40413ef22d5f35e957b",
+      "archive_size_bytes": 11819,
+      "sha256": "ed15ca540e6b8834f97a836c52cab097f9f46623329b60211d36322ae408ab72",
+      "size_bytes": 11735,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "notes/affinity_results.txt",
+      "category": "archived-analysis-including-unverified-predictions",
+      "archive_path": "airfoil_omp/affinity_results.txt",
+      "archive_sha256": "6601d59407fc28c597fb8f06a93c14455d72724d0e1e376ee12472b18d7a930d",
+      "archive_size_bytes": 2789,
+      "sha256": "6601d59407fc28c597fb8f06a93c14455d72724d0e1e376ee12472b18d7a930d",
+      "size_bytes": 2789,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "omp_scaling_27579401.out",
+      "category": "scaling-wall-time",
+      "archive_path": "airfoil_omp/logs/omp_scaling_27579401.out",
+      "archive_sha256": "f5cd9519253cc304d726e7ac9246aef99cc34d61b83894739e79502f4b9951b5",
+      "archive_size_bytes": 11353,
+      "sha256": "3c78e6443a19ec0b0ef194d27524a414ad73771321933a7c1500eba3a30f33c0",
+      "size_bytes": 11269,
+      "privacy_edits": [
+        "Removed scheduler job/account/cluster identification line"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "profiles/openmp/analysis_omp_16thread.txt",
+      "category": "profiles",
+      "archive_path": "airfoil_omp/output_prof/analysis_omp_16thread.txt",
+      "archive_sha256": "b57597e95cb43de377932bd8222cb6e9e8ca4df26703bae27b2331e4aa5eb837",
+      "archive_size_bytes": 8581,
+      "sha256": "b57597e95cb43de377932bd8222cb6e9e8ca4df26703bae27b2331e4aa5eb837",
+      "size_bytes": 8581,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "profiles/openmp/analysis_omp_1thread.txt",
+      "category": "profiles",
+      "archive_path": "airfoil_omp/output_prof/analysis_omp_1thread.txt",
+      "archive_sha256": "30bb30caa9ca1ef1d542a4eab9f2ec1064a6eb29665a41a0903efea5e31c6edf",
+      "archive_size_bytes": 8835,
+      "sha256": "30bb30caa9ca1ef1d542a4eab9f2ec1064a6eb29665a41a0903efea5e31c6edf",
+      "size_bytes": 8835,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "profiles/serial/analysis.txt",
+      "category": "profiles",
+      "archive_path": "airfoil/analysis.txt",
+      "archive_sha256": "0449e8aa64c2f75c2324056e39c136cce82b24c50096c1fffc3d07226ddf6df2",
+      "archive_size_bytes": 9677,
+      "sha256": "0449e8aa64c2f75c2324056e39c136cce82b24c50096c1fffc3d07226ddf6df2",
+      "size_bytes": 9677,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "profiles/serial/analysis_opt.txt",
+      "category": "profiles",
+      "archive_path": "airfoil/analysis_opt.txt",
+      "archive_sha256": "1fa6d5286d8bda7072011da1b9bc4294b38777f74085bc41857b4b6d9a3b0d22",
+      "archive_size_bytes": 9677,
+      "sha256": "1fa6d5286d8bda7072011da1b9bc4294b38777f74085bc41857b4b6d9a3b0d22",
+      "size_bytes": 9677,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "profiles/serial/analysis_opt_pro.txt",
+      "category": "profiles",
+      "archive_path": "airfoil/analysis_opt_pro.txt",
+      "archive_sha256": "37f2dc95f97f1908d65c08cf3eee410889985de4657c36b20c9a6d507ece063b",
+      "archive_size_bytes": 19049,
+      "sha256": "37f2dc95f97f1908d65c08cf3eee410889985de4657c36b20c9a6d507ece063b",
+      "size_bytes": 19049,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "run-scripts/cuda/run_cuda.sh",
+      "category": "run-scripts",
+      "archive_path": "airfoil-cuda/run_cuda.sh",
+      "archive_sha256": "b8c7565973ac150d289fc9040c133f629ded14016cc7de4b965b49f79c8d1841",
+      "archive_size_bytes": 360,
+      "sha256": "b8c7565973ac150d289fc9040c133f629ded14016cc7de4b965b49f79c8d1841",
+      "size_bytes": 360,
+      "privacy_edits": [],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "run-scripts/mpi/run_mpi.sh",
+      "category": "run-scripts",
+      "archive_path": "airfoil_mpi03/run_mpi.sh",
+      "archive_sha256": "26d56c737c3d9c3119c90af1c76713fedbecb325c384e4a87ca5b7b6a063f679",
+      "archive_size_bytes": 879,
+      "sha256": "f7cf0e25b141e22941de846f2b5b6dd8b299a2c544a323a694d1e6106320e306",
+      "size_bytes": 800,
+      "privacy_edits": [
+        "Removed private scheduler account directive",
+        "Replaced private scheduler output directory with relative path",
+        "Replaced private working directory with submission directory"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "run-scripts/mpi/run_vtk.sh",
+      "category": "run-scripts",
+      "archive_path": "airfoil_mpi03/run_vtk.sh",
+      "archive_sha256": "30d0c0c8cb2171efda37597d5dc29ebe837b514336a07bc1f0e7bba2bfff6560",
+      "archive_size_bytes": 491,
+      "sha256": "f2bfdaf6873878d8860fb07b5f0fffd805444ee0e0c0e75abcb95f0631b3594e",
+      "size_bytes": 459,
+      "privacy_edits": [
+        "Removed private scheduler account directive"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "run-scripts/openmp/omp_scaling.sh",
+      "category": "run-scripts",
+      "archive_path": "airfoil_omp/omp_scaling.sh",
+      "archive_sha256": "863d5f6e09b621f40ef47cea53da23f92c423878f5de4a11f9f46bec6f02bd8f",
+      "archive_size_bytes": 941,
+      "sha256": "6a136b26e4952baafa54cc391161e3d5ed250a17d10076e994d82a1edc5b6b29",
+      "size_bytes": 932,
+      "privacy_edits": [
+        "Replaced private working directory with submission directory"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "run-scripts/openmp/run_vtk.sh",
+      "category": "run-scripts",
+      "archive_path": "airfoil_omp/run_vtk.sh",
+      "archive_sha256": "ca20f2320340a43ed878aa5ffa293925a43c35a52042a4d6dd4f0d5d5577ec4b",
+      "archive_size_bytes": 477,
+      "sha256": "7ea8fd03b6c5b8d71d3a67f1598c7ecfa6a532a8fdfc4977265ba249fa08f9ac",
+      "size_bytes": 445,
+      "privacy_edits": [
+        "Removed private scheduler account directive"
+      ],
+      "numerical_log_values_changed": false
+    },
+    {
+      "path": "strong_scaling.csv",
+      "category": "derived-summary",
+      "sha256": "7087e4fcd92e22fb553a8636857c7cce392017f6c6842210192f6de8621bdd09",
+      "size_bytes": 1597,
+      "derived_from": "source_log column; one observation per worker per campaign",
+      "privacy_edits": []
+    }
+  ]
+}

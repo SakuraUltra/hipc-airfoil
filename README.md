@@ -101,17 +101,36 @@ successful compilation does not establish GPU runtime correctness or speedup.**
 
 ## Performance evidence
 
-Archived measurements, one run per configuration on a single CPU node:
+Original cluster measurements are retained in the
+[historical data archive](benchmarks/historical/README.md), including raw logs,
+run scripts, build configurations and profiles. All four available CPU scaling
+campaigns are shown below, with one observation per worker count on a single
+CPU node. Each row is a separate campaign, not a repeated-run aggregate:
 
-| 1024×256 workload | 1 worker | 16 workers | Speedup vs own 1-worker run |
+| 1024×256 workload / source log | 1 worker | 16 workers | Speedup vs own 1-worker run |
 | --- | ---: | ---: | ---: |
-| OpenMP | 332.667 s | 34.389 s | 9.674× |
-| MPI | 417.738 s | 31.535 s | 13.247× |
+| [OpenMP · 27579401](benchmarks/historical/omp_scaling_27579401.out) | 332.667 s | 34.389 s | 9.674× |
+| [OpenMP · 27404398](benchmarks/historical/additional/strong_scaling_27404398.out) | 399.462 s | 41.682 s | 9.584× |
+| [MPI · 27437194](benchmarks/historical/mpi_scaling_27437194.out) | 417.738 s | 31.535 s | 13.247× |
+| [MPI · 27232003](benchmarks/historical/additional/mpi_test_27232003.out) | 416.107 s | 30.173 s | 13.791× |
 
 These measurements belong to the **earlier implementation**. They do
 not benchmark the revised repository, share a common serial baseline, establish
 multi-node scaling, or include repeated-run uncertainty. The archived CUDA event
 time is retained separately and is not used to calculate a CPU/GPU speedup.
+
+Performance values in the archived logs are preserved; listed privacy edits
+remove identifying metadata only. The [manifest](benchmarks/historical/manifest.json)
+records original and retained file hashes. Check file integrity and both CSV
+summaries against the logs without running a simulation:
+
+```sh
+python3 scripts/check_historical.py
+```
+
+Local Mac tests use a separate workload and do not establish cluster performance.
+Choose cluster optimisations using matched tests on the target cluster; new
+measurements must not replace these historical observations.
 
 Collect fresh repeated full-process wall times with an unchanged workload:
 
@@ -138,7 +157,7 @@ cuda/                  CUDA kernels and device storage
 reference/serial/      archived serial reference (numerical code preserved)
 scripts/               validation, comparisons, benchmarks and optional plotting
 tests/                 negative controls for the verification tools
-benchmarks/historical/ retained legacy logs and derived CSV summaries
+benchmarks/historical/ original measurements, scripts, profiles and checked summaries
 docs/                  architecture, validation, provenance and methodology
 ```
 

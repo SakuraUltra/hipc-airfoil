@@ -1,0 +1,11 @@
+backend,workers,wall_seconds,speedup_vs_own_one_worker,parallel_efficiency,nx,ny,samples,source_log,evidence
+openmp,1,399.462,1.0,1.0,1024,256,1,additional/strong_scaling_27404398.out,separate historical campaign; do not pool with other campaigns
+openmp,2,195.044,2.0480609503496647,1.0240304751748324,1024,256,1,additional/strong_scaling_27404398.out,separate historical campaign; do not pool with other campaigns
+openmp,4,103.288,3.8674579815661065,0.9668644953915266,1024,256,1,additional/strong_scaling_27404398.out,separate historical campaign; do not pool with other campaigns
+openmp,8,56.529,7.066496842328716,0.8833121052910895,1024,256,1,additional/strong_scaling_27404398.out,separate historical campaign; do not pool with other campaigns
+openmp,16,41.682,9.583561249460198,0.5989725780912624,1024,256,1,additional/strong_scaling_27404398.out,separate historical campaign; do not pool with other campaigns
+mpi,1,416.107,1.0,1.0,1024,256,1,additional/mpi_test_27232003.out,separate historical campaign; do not pool with other campaigns
+mpi,2,215.570,1.9302639513847009,0.9651319756923504,1024,256,1,additional/mpi_test_27232003.out,separate historical campaign; do not pool with other campaigns
+mpi,4,111.666,3.7263535901706875,0.9315883975426719,1024,256,1,additional/mpi_test_27232003.out,separate historical campaign; do not pool with other campaigns
+mpi,8,57.632,7.220068711826762,0.9025085889783453,1024,256,1,additional/mpi_test_27232003.out,separate historical campaign; do not pool with other campaigns
+mpi,16,30.173,13.790706923408345,0.8619191827130216,1024,256,1,additional/mpi_test_27232003.out,separate historical campaign; do not pool with other campaigns

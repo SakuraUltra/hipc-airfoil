@@ -1,0 +1,185 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 99.97    375.14   375.14                             frame_dummy
+  0.11    375.55     0.41                             apply_boundary_conditions
+  0.00    375.56     0.01                             poisson
+  0.00    375.56     0.00        6     0.00     0.00  alloc_2d_array
+  0.00    375.56     0.00        6     0.00     0.00  free_2d_array
+  0.00    375.56     0.00        1     0.00     0.00  alloc_2d_char_array
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.00% of 375.56 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     99.9  375.14    0.00                 frame_dummy [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]      0.1    0.41    0.00                 apply_boundary_conditions [2]
+-----------------------------------------------
+                                                 <spontaneous>
+[3]      0.0    0.01    0.00                 poisson [3]
+-----------------------------------------------
+                0.00    0.00       6/6           allocate_arrays [7]
+[4]      0.0    0.00    0.00       6         alloc_2d_array [4]
+-----------------------------------------------
+                0.00    0.00       6/6           free_arrays [14]
+[5]      0.0    0.00    0.00       6         free_2d_array [5]
+-----------------------------------------------
+                0.00    0.00       1/1           allocate_arrays [7]
+[6]      0.0    0.00    0.00       1         alloc_2d_char_array [6]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [4] alloc_2d_array          [2] apply_boundary_conditions [5] free_2d_array
+   [6] alloc_2d_char_array     [1] frame_dummy             [3] poisson
+Step        0, Time: 9.53674316e-04 (del_t: 9.53674316e-04), Residual: 1.35337015e+03
+Step      100, Time: 9.63211060e-02 (del_t: 9.53674316e-04), Residual: 1.09833378e+02
+Step      200, Time: 1.91688538e-01 (del_t: 9.53674316e-04), Residual: 5.66808711e+01
+Step      300, Time: 2.87055969e-01 (del_t: 9.53674316e-04), Residual: 1.37298619e+02
+Step      400, Time: 3.82423401e-01 (del_t: 9.53674316e-04), Residual: 3.24645271e+01
+Step      500, Time: 4.77790833e-01 (del_t: 9.53674316e-04), Residual: 1.29164225e+02
+Step      600, Time: 5.73158264e-01 (del_t: 9.53674316e-04), Residual: 9.48724400e+01
+Step      700, Time: 6.68525696e-01 (del_t: 9.53674316e-04), Residual: 1.07466540e+01
+Step      800, Time: 7.63893127e-01 (del_t: 9.53674316e-04), Residual: 2.47848642e+02
+Step      900, Time: 8.59260559e-01 (del_t: 9.53674316e-04), Residual: 5.45116073e+01
+Step     1000, Time: 9.54627991e-01 (del_t: 9.53674316e-04), Residual: 3.21686320e+01
+Step     1100, Time: 1.04999542e+00 (del_t: 9.53674316e-04), Residual: 2.73468989e+02
+Step     1200, Time: 1.14536285e+00 (del_t: 9.53674316e-04), Residual: 2.85933339e+01
+Step     1300, Time: 1.24073029e+00 (del_t: 9.53674316e-04), Residual: 5.39776765e+01
+Step     1400, Time: 1.33609772e+00 (del_t: 9.53674316e-04), Residual: 1.28132214e+02
+Step     1500, Time: 1.43146515e+00 (del_t: 9.53674316e-04), Residual: 9.91370293e+00
+Step     1600, Time: 1.52683258e+00 (del_t: 9.53674316e-04), Residual: 7.98281586e+01
+Step     1700, Time: 1.62220001e+00 (del_t: 9.53674316e-04), Residual: 6.53554953e+01
+Step     1800, Time: 1.71756744e+00 (del_t: 9.53674316e-04), Residual: 6.53469704e+00
+Step     1900, Time: 1.81293488e+00 (del_t: 9.53674316e-04), Residual: 6.92182253e+01
+Step     2000, Time: 1.90830231e+00 (del_t: 9.53674316e-04), Residual: 3.71307752e+01
+Step     2098, Time: 2.00080872e+00, Residual: 2.59469595e+01
+Simulation complete.

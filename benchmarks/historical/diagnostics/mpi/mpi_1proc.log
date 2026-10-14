@@ -1,0 +1,27 @@
+Running with 1 MPI processes
+Global domain: 1024 x 256
+Local domain per process: 1024 x 256 (plus 2 halo columns)
+Domain decomposition: X-axis split
+Step        0, Time: 9.53674316e-04 (del_t: 9.53674316e-04), Residual: 1.35337015e+03
+Step      100, Time: 9.63211060e-02 (del_t: 9.53674316e-04), Residual: 1.09833378e+02
+Step      200, Time: 1.91688538e-01 (del_t: 9.53674316e-04), Residual: 5.66808711e+01
+Step      300, Time: 2.87055969e-01 (del_t: 9.53674316e-04), Residual: 1.37298619e+02
+Step      400, Time: 3.82423401e-01 (del_t: 9.53674316e-04), Residual: 3.24645271e+01
+Step      500, Time: 4.77790833e-01 (del_t: 9.53674316e-04), Residual: 1.29164225e+02
+Step      600, Time: 5.73158264e-01 (del_t: 9.53674316e-04), Residual: 9.48724400e+01
+Step      700, Time: 6.68525696e-01 (del_t: 9.53674316e-04), Residual: 1.07466540e+01
+Step      800, Time: 7.63893127e-01 (del_t: 9.53674316e-04), Residual: 2.47848642e+02
+Step      900, Time: 8.59260559e-01 (del_t: 9.53674316e-04), Residual: 5.45116073e+01
+Step     1000, Time: 9.54627991e-01 (del_t: 9.53674316e-04), Residual: 3.21686320e+01
+Step     1100, Time: 1.04999542e+00 (del_t: 9.53674316e-04), Residual: 2.73468989e+02
+Step     1200, Time: 1.14536285e+00 (del_t: 9.53674316e-04), Residual: 2.85933339e+01
+Step     1300, Time: 1.24073029e+00 (del_t: 9.53674316e-04), Residual: 5.39776765e+01
+Step     1400, Time: 1.33609772e+00 (del_t: 9.53674316e-04), Residual: 1.28132214e+02
+Step     1500, Time: 1.43146515e+00 (del_t: 9.53674316e-04), Residual: 9.91370293e+00
+Step     1600, Time: 1.52683258e+00 (del_t: 9.53674316e-04), Residual: 7.98281586e+01
+Step     1700, Time: 1.62220001e+00 (del_t: 9.53674316e-04), Residual: 6.53554953e+01
+Step     1800, Time: 1.71756744e+00 (del_t: 9.53674316e-04), Residual: 6.53469704e+00
+Step     1900, Time: 1.81293488e+00 (del_t: 9.53674316e-04), Residual: 6.92182253e+01
+Step     2000, Time: 1.90830231e+00 (del_t: 9.53674316e-04), Residual: 3.71307752e+01
+Step     2098, Time: 2.00080872e+00, Residual: 2.59469595e+01
+Simulation complete.

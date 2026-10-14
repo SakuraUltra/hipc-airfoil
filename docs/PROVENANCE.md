@@ -57,7 +57,12 @@ time. The two one-worker baselines differ; these ratios do not establish a
 common serial-baseline comparison. There are no recorded repeated-run
 confidence intervals, and the MPI measurements do not demonstrate multi-node
 scaling. Historical CSV summaries are derived from the retained logs rather
-than new runs.
+than new runs. A second OpenMP campaign (399.462 s to 41.682 s) and a second
+MPI campaign (416.107 s to 30.173 s) are also retained in `additional/`, with
+their own `additional_scaling.csv`. These are independent observations, not
+established repeated runs of an identical binary or environment. The
+[historical index](../benchmarks/historical/README.md) lists every campaign and
+its full worker-count series.
 
 The archived CUDA log reports `Total GPU time: 46290.664 ms`, approximately
 **46.291 s**. That event-timed interval excludes initialisation and final output;
@@ -70,6 +75,15 @@ loop wall time; their scopes are documented in [benchmarks](BENCHMARKS.md).
 Fresh CPU/MPI checks and later measurements retain their own commands,
 environment and results. They must not overwrite the historical observations
 or imply that those observations benchmark the current commit.
+
+The archive also retains available small text profiles, diagnostic logs, launch
+scripts and build configurations. `manifest.json` records each source file's
+archive-relative path, original SHA-256 and retained SHA-256, plus the explicit
+privacy edits. Account, cluster and private path metadata is omitted; measured
+performance values are preserved. The original two CPU scaling logs and CUDA
+log already retained in the repository remain unchanged by this expanded
+archive. `scripts/check_historical.py` checks file integrity and independently
+recomputes both CSV summaries from their source logs.
 
 ## Distribution and rights
 

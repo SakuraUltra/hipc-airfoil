@@ -1,0 +1,28 @@
+CC=mpicc
+CFLAGS=-O3
+LIBFLAGS=-lm
+
+OBJDIR = obj
+
+_OBJ = args.o data.o setup.o vtk.o boundary.o airfoil_mpi.o
+OBJ = $(patsubst %,$(OBJDIR)/%,$(_OBJ))
+
+.PHONY: directories
+
+all: directories airfoil_mpi
+
+obj/%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
+airfoil_mpi: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBFLAGS) 
+
+clean:
+	rm -Rf $(OBJDIR)
+	rm -f airfoil_mpi
+
+directories: $(OBJDIR)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+

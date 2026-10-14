@@ -1,0 +1,28 @@
+CC=gcc
+CFLAGS=-pg -O3 -march=native
+LIBFLAGS=-lm
+
+OBJDIR = obj_opt
+
+_OBJ = args.o data.o setup.o vtk.o boundary.o airfoil_opt.o
+OBJ = $(patsubst %,$(OBJDIR)/%,$(_OBJ))
+
+.PHONY: directories
+
+all: directories airfoil_opt
+
+$(OBJDIR)/%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
+airfoil_opt: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBFLAGS) 
+
+clean:
+	rm -Rf $(OBJDIR)
+	rm -f airfoil_opt
+
+directories: $(OBJDIR)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+

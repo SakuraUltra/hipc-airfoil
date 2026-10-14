@@ -1,0 +1,350 @@
+Step        0, Time: 2.38418579e-04 (del_t: 2.38418579e-04), Residual: 8.72558159e+03
+Step      100, Time: 2.40802765e-02 (del_t: 2.38418579e-04), Residual: 1.71110338e+02
+Step      200, Time: 4.79221344e-02 (del_t: 2.38418579e-04), Residual: 2.85832540e+02
+Step      300, Time: 7.17639923e-02 (del_t: 2.38418579e-04), Residual: 2.05210441e+02
+Step      400, Time: 9.56058502e-02 (del_t: 2.38418579e-04), Residual: 1.30728933e+02
+Step      500, Time: 1.19447708e-01 (del_t: 2.38418579e-04), Residual: 8.21194280e+02
+Step      600, Time: 1.43289566e-01 (del_t: 2.38418579e-04), Residual: 2.32642620e+02
+Step      700, Time: 1.67131424e-01 (del_t: 2.38418579e-04), Residual: 1.78348021e+02
+Step      800, Time: 1.90973282e-01 (del_t: 2.38418579e-04), Residual: 1.46809733e+02
+Step      900, Time: 2.14815140e-01 (del_t: 2.38418579e-04), Residual: 6.26466804e+01
+Step     1000, Time: 2.38656998e-01 (del_t: 2.38418579e-04), Residual: 3.01091083e+02
+Step     1100, Time: 2.62498856e-01 (del_t: 2.38418579e-04), Residual: 4.57745515e+02
+Step     1200, Time: 2.86340714e-01 (del_t: 2.38418579e-04), Residual: 2.12286917e+02
+Step     1300, Time: 3.10182571e-01 (del_t: 2.38418579e-04), Residual: 1.25258843e+02
+Step     1400, Time: 3.34024429e-01 (del_t: 2.38418579e-04), Residual: 1.91729580e+01
+Step     1500, Time: 3.57866287e-01 (del_t: 2.38418579e-04), Residual: 1.40557210e+02
+Step     1600, Time: 3.81708145e-01 (del_t: 2.38418579e-04), Residual: 3.92440331e+02
+Step     1700, Time: 4.05550003e-01 (del_t: 2.38418579e-04), Residual: 4.21947101e+02
+Step     1800, Time: 4.29391861e-01 (del_t: 2.38418579e-04), Residual: 1.56359092e+02
+Step     1900, Time: 4.53233719e-01 (del_t: 2.38418579e-04), Residual: 3.54814071e+01
+Step     2000, Time: 4.77075577e-01 (del_t: 2.38418579e-04), Residual: 6.48810486e+01
+Step     2100, Time: 5.00917435e-01 (del_t: 2.38418579e-04), Residual: 1.89248002e+02
+Step     2200, Time: 5.24759293e-01 (del_t: 2.38418579e-04), Residual: 8.29458540e+02
+Step     2300, Time: 5.48601151e-01 (del_t: 2.38418579e-04), Residual: 2.68399598e+02
+Step     2400, Time: 5.72443008e-01 (del_t: 2.38418579e-04), Residual: 8.29941693e+01
+Step     2500, Time: 5.96284866e-01 (del_t: 2.38418579e-04), Residual: 2.25417452e+01
+Step     2600, Time: 6.20126724e-01 (del_t: 2.38418579e-04), Residual: 9.65036972e+01
+Step     2700, Time: 6.43968582e-01 (del_t: 2.38418579e-04), Residual: 3.13505997e+02
+Step     2800, Time: 6.67810440e-01 (del_t: 2.38418579e-04), Residual: 7.42905356e+02
+Step     2900, Time: 6.91652298e-01 (del_t: 2.38418579e-04), Residual: 1.54646474e+02
+Step     3000, Time: 7.15494156e-01 (del_t: 2.38418579e-04), Residual: 4.35658831e+01
+Step     3100, Time: 7.39336014e-01 (del_t: 2.38418579e-04), Residual: 4.02715089e+01
+Step     3200, Time: 7.63177872e-01 (del_t: 2.38418579e-04), Residual: 1.53114381e+02
+Step     3300, Time: 7.87019730e-01 (del_t: 2.38418579e-04), Residual: 7.75045692e+02
+Step     3400, Time: 8.10861588e-01 (del_t: 2.38418579e-04), Residual: 3.03203384e+02
+Step     3500, Time: 8.34703445e-01 (del_t: 2.38418579e-04), Residual: 9.52993333e+01
+Step     3600, Time: 8.58545303e-01 (del_t: 2.38418579e-04), Residual: 1.14260907e+01
+Step     3700, Time: 8.82387161e-01 (del_t: 2.38418579e-04), Residual: 7.76921957e+01
+Step     3800, Time: 9.06229019e-01 (del_t: 2.38418579e-04), Residual: 2.57523870e+02
+Step     3900, Time: 9.30070877e-01 (del_t: 2.38418579e-04), Residual: 8.78471699e+02
+Step     4000, Time: 9.53912735e-01 (del_t: 2.38418579e-04), Residual: 1.77097960e+02
+Step     4100, Time: 9.77754593e-01 (del_t: 2.38418579e-04), Residual: 5.25775683e+01
+Step     4200, Time: 1.00159645e+00 (del_t: 2.38418579e-04), Residual: 2.67705883e+01
+Step     4300, Time: 1.02543831e+00 (del_t: 2.38418579e-04), Residual: 1.29090721e+02
+Step     4400, Time: 1.04928017e+00 (del_t: 2.38418579e-04), Residual: 5.19676328e+02
+Step     4500, Time: 1.07312202e+00 (del_t: 2.38418579e-04), Residual: 3.57215344e+02
+Step     4600, Time: 1.09696388e+00 (del_t: 2.38418579e-04), Residual: 1.07840281e+02
+Step     4700, Time: 1.12080574e+00 (del_t: 2.38418579e-04), Residual: 1.78582773e+01
+Step     4800, Time: 1.14464760e+00 (del_t: 2.38418579e-04), Residual: 6.30364807e+01
+Step     4900, Time: 1.16848946e+00 (del_t: 2.38418579e-04), Residual: 2.16433219e+02
+Step     5000, Time: 1.19233131e+00 (del_t: 2.38418579e-04), Residual: 7.09289481e+02
+Step     5100, Time: 1.21617317e+00 (del_t: 2.38418579e-04), Residual: 1.94353568e+02
+Step     5200, Time: 1.24001503e+00 (del_t: 2.38418579e-04), Residual: 6.43268214e+01
+Step     5300, Time: 1.26385689e+00 (del_t: 2.38418579e-04), Residual: 1.58355548e+01
+Step     5400, Time: 1.28769875e+00 (del_t: 2.38418579e-04), Residual: 1.11708013e+02
+Step     5500, Time: 1.31154060e+00 (del_t: 2.38418579e-04), Residual: 3.36928901e+02
+Step     5600, Time: 1.33538246e+00 (del_t: 2.38418579e-04), Residual: 3.65855808e+02
+Step     5700, Time: 1.35922432e+00 (del_t: 2.38418579e-04), Residual: 1.24499546e+02
+Step     5800, Time: 1.38306618e+00 (del_t: 2.38418579e-04), Residual: 2.65379440e+01
+Step     5900, Time: 1.40690804e+00 (del_t: 2.38418579e-04), Residual: 5.16252442e+01
+Step     6000, Time: 1.43074989e+00 (del_t: 2.38418579e-04), Residual: 1.66009020e+02
+Step     6100, Time: 1.45459175e+00 (del_t: 2.38418579e-04), Residual: 4.84086691e+02
+Step     6200, Time: 1.47843361e+00 (del_t: 2.38418579e-04), Residual: 2.17107794e+02
+Step     6300, Time: 1.50227547e+00 (del_t: 2.38418579e-04), Residual: 7.12652009e+01
+Step     6400, Time: 1.52611732e+00 (del_t: 2.38418579e-04), Residual: 5.93394624e+00
+Step     6500, Time: 1.54995918e+00 (del_t: 2.38418579e-04), Residual: 8.72998115e+01
+Step     6600, Time: 1.57380104e+00 (del_t: 2.38418579e-04), Residual: 2.63317812e+02
+Step     6700, Time: 1.59764290e+00 (del_t: 2.38418579e-04), Residual: 3.33622644e+02
+Step     6800, Time: 1.62148476e+00 (del_t: 2.38418579e-04), Residual: 1.25816425e+02
+Step     6900, Time: 1.64532661e+00 (del_t: 2.38418579e-04), Residual: 3.65018283e+01
+Step     7000, Time: 1.66916847e+00 (del_t: 2.38418579e-04), Residual: 3.67354149e+01
+Step     7100, Time: 1.69301033e+00 (del_t: 2.38418579e-04), Residual: 1.40432139e+02
+Step     7200, Time: 1.71685219e+00 (del_t: 2.38418579e-04), Residual: 2.83383614e+02
+Step     7300, Time: 1.74069405e+00 (del_t: 2.38418579e-04), Residual: 1.92780381e+02
+Step     7400, Time: 1.76453590e+00 (del_t: 2.38418579e-04), Residual: 8.14029081e+01
+Step     7500, Time: 1.78837776e+00 (del_t: 2.38418579e-04), Residual: 3.71952598e+00
+Step     7600, Time: 1.81221962e+00 (del_t: 2.38418579e-04), Residual: 7.29648396e+01
+Step     7700, Time: 1.83606148e+00 (del_t: 2.38418579e-04), Residual: 1.68749580e+02
+Step     7800, Time: 1.85990334e+00 (del_t: 2.38418579e-04), Residual: 2.33787026e+02
+Step     7900, Time: 1.88374519e+00 (del_t: 2.38418579e-04), Residual: 1.29623263e+02
+Step     8000, Time: 1.90758705e+00 (del_t: 2.38418579e-04), Residual: 4.00058937e+01
+Step     8100, Time: 1.93142891e+00 (del_t: 2.38418579e-04), Residual: 2.62856990e+01
+Step     8200, Time: 1.95527077e+00 (del_t: 2.38418579e-04), Residual: 9.66167681e+01
+Step     8300, Time: 1.97911263e+00 (del_t: 2.38418579e-04), Residual: 1.90918401e+02
+Step     8389, Time: 2.00009346e+00, Residual: 1.18584557e+02
+Simulation complete.
+ber is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [8] alloc_2d_array          [2] compute_tentative_velocity [4] update_velocity
+  [10] alloc_2d_char_array     [9] free_2d_array           [7] write_vtk
+   [6] apply_boundary_conditions [1] poisson
+   [5] compute_rhs             [3] set_timestep_interval
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 42.88   1779.83  1779.83                             write_vtk
+ 35.85   3268.17  1488.33                             print_opts
+ 18.31   4028.24   760.07                             set_default_base
+  1.99   4111.05    82.81                             apply_boundary_conditions
+  0.53   4132.94    21.89                             parse_args
+  0.19   4140.71     7.77                             _fini
+  0.14   4146.51     5.80                             problem_set_up
+  0.11   4151.08     4.57                             print_help
+  0.07   4153.82     2.74                             __libc_csu_fini
+  0.02   4154.86     1.03                             set_basename
+  0.01   4155.27     0.41                             get_basename
+  0.00   4155.28     0.01                             __libc_csu_init
+  0.00   4155.28     0.00        6     0.00     0.00  compute_tentative_velocity
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.00% of 4155.28 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     42.8 1779.83    0.00                 write_vtk [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]     35.8 1488.33    0.00                 print_opts [2]
+-----------------------------------------------
+                                                 <spontaneous>
+[3]     18.3  760.07    0.00                 set_default_base [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]      2.0   82.81    0.00                 apply_boundary_conditions [4]
+-----------------------------------------------
+                                                 <spontaneous>
+[5]      0.5   21.89    0.00                 parse_args [5]
+-----------------------------------------------
+                                                 <spontaneous>
+[6]      0.2    7.77    0.00                 _fini [6]
+-----------------------------------------------
+                                                 <spontaneous>
+[7]      0.1    5.80    0.00                 problem_set_up [7]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]      0.1    4.57    0.00                 print_help [8]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      0.1    2.74    0.00                 __libc_csu_fini [9]
+-----------------------------------------------
+                                                 <spontaneous>
+[10]     0.0    1.03    0.00                 set_basename [10]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     0.0    0.41    0.00                 get_basename [11]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     0.0    0.01    0.00                 __libc_csu_init [12]
+-----------------------------------------------
+                0.00    0.00       6/6           poisson [24]
+[13]     0.0    0.00    0.00       6         compute_tentative_velocity [13]
+-----------------------------------------------
+                                   7             poisson [24]
+[24]     0.0    0.00    0.00       0+7       poisson [24]
+                0.00    0.00       6/6           compute_tentative_velocity [13]
+                                   7             poisson [24]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [9] __libc_csu_fini        [11] get_basename           [10] set_basename
+  [12] __libc_csu_init         [5] parse_args              [3] set_default_base
+   [6] _fini                   [8] print_help              [1] write_vtk
+   [4] apply_boundary_conditions [2] print_opts
+  [13] compute_tentative_velocity [7] problem_set_up

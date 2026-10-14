@@ -32,7 +32,7 @@ SHARED_ARGS := $(BUILD_DIR)/serial/args.o $(BUILD_DIR)/openmp/args.o $(BUILD_DIR
 SHARED_VTK := $(BUILD_DIR)/serial/vtk.o $(BUILD_DIR)/openmp/vtk.o $(BUILD_DIR)/cuda/vtk.o
 SHARED_DATA := $(BUILD_DIR)/serial/data.o $(BUILD_DIR)/openmp/data.o
 
-.PHONY: all cpu serial openmp mpi cuda reference check validate info clean help
+.PHONY: all cpu serial openmp mpi cuda reference check check-historical validate info clean help
 all: cpu
 cpu: serial openmp
 serial: $(BUILD_DIR)/airfoil_serial $(BUILD_DIR)/airfoil_serial_opt
@@ -96,8 +96,12 @@ $(BUILD_DIR)/airfoil_reference: $(wildcard reference/serial/*.c) $(wildcard refe
 	$(CC) $(CPPFLAGS) $(CFLAGS) -include string.h -Ireference/serial $(filter-out reference/serial/airfoil_opt.c,$(filter %.c,$^)) $(LDFLAGS) $(LDLIBS) -o $@
 
 check: cpu
+	$(PYTHON) scripts/check_historical.py
 	$(PYTHON) -m unittest discover -s tests -v
 	$(PYTHON) scripts/validate.py --build-dir $(BUILD_DIR)
+
+check-historical:
+	$(PYTHON) scripts/check_historical.py
 
 validate: check
 
@@ -113,4 +117,5 @@ help:
 	@echo 'make cuda       Build CUDA variant (requires nvcc; CUDA_ARCH=75 by default)'
 	@echo 'make reference  Build archived serial reference (known legacy issues)'
 	@echo 'make check      Run Python tests and numerical backend validation'
+	@echo 'make check-historical  Verify archived logs, hashes and timing summaries'
 	@echo 'Override CC, MPICC, CFLAGS, BUILD_DIR, CUDA_ARCH and PYTHON as needed.'
