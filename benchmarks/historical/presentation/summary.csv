@@ -1,0 +1,14 @@
+implementation,workers,worker_unit,reported_real_seconds,reported_user_seconds,reported_speedup,reported_efficiency_percent,source_slide,source_image
+serial,1,core,378.57,376.12,1.00,100.0,19,presentation/summary-table.png
+serial_opt,1,core,309.81,307.56,1.22,122.0,19,presentation/summary-table.png
+openmp,1,thread,332.66,329.96,1.14,114.0,19,presentation/summary-table.png
+openmp,2,thread,175.80,349.17,2.15,107.5,19,presentation/summary-table.png
+openmp,4,thread,89.73,355.61,4.22,105.5,19,presentation/summary-table.png
+openmp,8,thread,55.54,436.83,6.82,85.3,19,presentation/summary-table.png
+openmp,16,thread,34.38,531.73,11.01,68.8,19,presentation/summary-table.png
+mpi,1,process,417.73,415.06,0.91,91.0,19,presentation/summary-table.png
+mpi,2,process,214.87,425.55,1.76,88.0,19,presentation/summary-table.png
+mpi,4,process,110.36,436.66,3.43,85.8,19,presentation/summary-table.png
+mpi,8,process,58.95,464.06,6.42,80.3,19,presentation/summary-table.png
+mpi,16,process,31.53,491.60,12.01,75.1,19,presentation/summary-table.png
+cuda,1,gpu,46.33,45.11,8.17,,19,presentation/summary-table.png

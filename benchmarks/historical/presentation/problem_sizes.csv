@@ -1,0 +1,13 @@
+size_category,nx,ny,total_cells,backend,workers,total_seconds,reported_time_per_step,source_slide,source_image
+Small,256,64,16384,mpi,16,1.43,4.11,20,presentation/problem-size-table.png
+Small,256,64,16384,openmp,16,1.49,4.28,20,presentation/problem-size-table.png
+Small,256,64,16384,cuda,,3.11,8.94,20,presentation/problem-size-table.png
+Medium,1024,256,262144,mpi,16,30.01,14.30,20,presentation/problem-size-table.png
+Medium,1024,256,262144,openmp,16,35.50,16.92,20,presentation/problem-size-table.png
+Medium,1024,256,262144,cuda,,22.04,10.51,20,presentation/problem-size-table.png
+Large,2048,512,1048576,mpi,16,465.55,55.49,20,presentation/problem-size-table.png
+Large,2048,512,1048576,openmp,16,460.79,55.43,20,presentation/problem-size-table.png
+Large,2048,512,1048576,cuda,,266.66,31.96,20,presentation/problem-size-table.png
+ExtraLarge,4096,1024,4194304,mpi,16,7564.00,225.42,20,presentation/problem-size-table.png
+ExtraLarge,4096,1024,4194304,openmp,16,6889.00,205.32,20,presentation/problem-size-table.png
+ExtraLarge,4096,1024,4194304,cuda,,3954.56,117.85,20,presentation/problem-size-table.png

@@ -114,15 +114,49 @@ CPU node. Each row is a separate campaign, not a repeated-run aggregate:
 | [MPI · 27437194](benchmarks/historical/mpi_scaling_27437194.out) | 417.738 s | 31.535 s | 13.247× |
 | [MPI · 27232003](benchmarks/historical/additional/mpi_test_27232003.out) | 416.107 s | 30.173 s | 13.791× |
 
-These measurements belong to the **earlier implementation**. They do
-not benchmark the revised repository, share a common serial baseline, establish
-multi-node scaling, or include repeated-run uncertainty. The archived CUDA event
-time is retained separately and is not used to calculate a CPU/GPU speedup.
+![Historical CPU scaling and the separately timed CUDA event interval](docs/assets/performance.png)
+
+*CPU curves retain each campaign separately and use its own one-worker baseline.
+The CUDA panel has a different timing scope. These observations do not establish
+a common serial-baseline or CPU/GPU speedup comparison. The presentation's
+separately archived ratios use its reported 378.57 s serial baseline.*
+
+The CUDA records below are preserved with their original measurement labels:
+
+| Historical CUDA record | Time | Timing scope / source |
+| --- | ---: | --- |
+| Raw solver log | **46.290664 s** | CUDA event interval, from [46290.664 ms](benchmarks/historical/cuda_steps.txt); excludes initial upload and final download/output |
+| Presentation summary, slide 19 | **46.33 s** | Reported process `real` time; [source table](benchmarks/historical/presentation/summary-table.png), underlying shell timing log unavailable |
+
+The presentation also reports the following separate problem-size campaign.
+CPU configurations use 16 workers; its source chart labels the GPU **Tesla T4**:
+
+| Grid | MPI, 16 processes | OpenMP, 16 threads | CUDA, reported time |
+| --- | ---: | ---: | ---: |
+| 256×64 | 1.43 s | 1.49 s | 3.11 s |
+| 1024×256 | 30.01 s | 35.50 s | **22.04 s** |
+| 2048×512 | 465.55 s | 460.79 s | 266.66 s |
+| 4096×1024 | 7564.00 s | 6889.00 s | 3954.56 s |
+
+![Problem-size timings reported in the historical presentation](docs/assets/performance_problem_sizes.png)
+
+*Source: [slide 20 table](benchmarks/historical/presentation/problem-size-table.png),
+[transcribed data](benchmarks/historical/presentation/problem_sizes.csv), and
+[slide 18 chart](benchmarks/historical/presentation/problem-size-chart.png).
+Timing boundaries, exact binaries and run settings for this campaign are not
+available. The 22.04 s, 46.33 s and 46.290664 s CUDA records remain separate;
+they do not establish a measured improvement between code versions.*
+
+All performance values above describe **earlier implementations**. They are
+single observations, without repeated-run uncertainty or multi-node scaling.
+The maintained CUDA code has passed Linux compilation checks; **its GPU runtime
+correctness and performance have not yet been measured**. Full timing and source
+details are in the [historical data index](benchmarks/historical/README.md).
 
 Performance values in the archived logs are preserved; listed privacy edits
 remove identifying metadata only. The [manifest](benchmarks/historical/manifest.json)
-records original and retained file hashes. Check file integrity and both CSV
-summaries against the logs without running a simulation:
+records original and retained file hashes. Check file integrity, raw-log timing
+summaries and presentation-table structure without running a simulation:
 
 ```sh
 python3 scripts/check_historical.py

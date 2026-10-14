@@ -77,6 +77,15 @@ claim a controlled CPU-to-GPU speedup. The retained CUDA launch script names a
 toolkit module, and its Makefile specifies a compilation architecture. Neither
 identifies the physical GPU, driver, or exact executable used for this record.
 
+[cuda_timing.csv](cuda_timing.csv) preserves the event interval in milliseconds
+and seconds, together with the raw log's final step and simulated time. The
+archive checker validates the unit conversion and final state directly against
+the log. The separately supplied [presentation tables](presentation/README.md)
+add a reported process `real` duration of **46.33 s** and a separate problem-size
+campaign with **22.04 s** at 1024×256. These records do not replace or explain
+the **46.290664 s** event interval. Their exact configurations and timing
+boundaries are not independently established.
+
 ## Contents and evidence quality
 
 - `profiles/serial/` preserves the original serial gprof reports. In

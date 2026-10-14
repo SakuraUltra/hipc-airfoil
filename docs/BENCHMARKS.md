@@ -30,6 +30,14 @@ before final download/output. It includes host-driven convergence work and is
 neither whole-program wall time nor a pure kernel-time sum. It is not directly
 divided into CPU `real` times.
 
+The [presentation supplement](../benchmarks/historical/presentation/README.md)
+retains two additional tables as checked transcriptions plus their original
+data-only images. Its CUDA 46.33 s summary and 22.04 s problem-size observation
+at 1024×256 remain separate from the raw 46.290664 s event interval. Presentation
+ratios are archived claims; raw shell logs, binary provenance and exact timing
+boundaries for those tables are unavailable. No measured code-version or
+controlled CPU/GPU improvement is inferred from the difference.
+
 `benchmarks/results/` is ignored generated evidence for fresh runs. The runner
 refuses an existing output prefix, preserves failure logs and stops on a failed
 or timed-out process. It never fabricates a result for a missing backend.
@@ -98,6 +106,23 @@ times for every backend and record the GPU model/driver/toolkit. Revised CUDA
 runtime performance remains unmeasured until an NVIDIA device is used.
 
 ## Optional illustration
+
+The README's performance figures are generated from the checked historical
+records, including every available CPU scaling campaign and separately labelled
+CUDA event and presentation evidence:
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-visualisation.txt
+.venv/bin/python scripts/plot_performance.py
+```
+
+This creates PNG and SVG versions of `docs/assets/performance` and
+`docs/assets/performance_problem_sizes`. The renderer checks the historical
+archive first. CPU speedups use each raw-log campaign's own one-worker run.
+CUDA event time is displayed separately, without a CPU/GPU speedup ratio.
+The problem-size chart uses the presentation's reported totals; per-step
+values and speculative chart annotations are excluded.
 
 The README's figure is generated from an actual maintained serial run:
 

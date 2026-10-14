@@ -85,6 +85,16 @@ log already retained in the repository remain unchanged by this expanded
 archive. `scripts/check_historical.py` checks file integrity and independently
 recomputes both CSV summaries from their source logs.
 
+A supplied historical presentation supplements this archive with lossless
+data-only images and transcribed summary and problem-size tables. Identifying
+slides and the complete deck are not published. The manifest records the
+presentation's SHA-256, source slide/media identifiers and retained file hashes.
+Its reported GPU label, Tesla T4, is a presentation claim rather than an
+independent hardware inventory. Its 46.33 s CUDA process-duration summary and
+22.04 s problem-size result remain separate from the 46.290664 s raw event log;
+missing run metadata prevents treating the differences as a code-version
+improvement. See the [presentation source notes](../benchmarks/historical/presentation/README.md).
+
 ## Distribution and rights
 
 The existing serial implementation retains its original authorship. No upstream

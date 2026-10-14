@@ -124,6 +124,14 @@
       "numerical_log_values_changed": false
     },
     {
+      "path": "cuda_timing.csv",
+      "category": "derived-cuda-event-summary",
+      "sha256": "eaaa91688bd17af5728ccf5389868515af050d088e1dda94f592569908e4fa66",
+      "size_bytes": 258,
+      "derived_from": "cuda_steps.txt",
+      "privacy_edits": []
+    },
+    {
       "path": "diagnostics/mpi/mpi_16proc.log",
       "category": "diagnostics",
       "archive_path": "airfoil_mpi03/logs/mpi_16proc.log",
@@ -347,6 +355,55 @@
       "numerical_log_values_changed": false
     },
     {
+      "path": "presentation/problem-size-chart.png",
+      "category": "presentation-source-image",
+      "sha256": "bed9784b70399e79e283aa48d11ec369cc908e5dd05ad1174e5a4fa0a3228c21",
+      "size_bytes": 55811,
+      "source_slide": 18,
+      "source_media_part": "ppt/media/image33.png",
+      "source_document_sha256": "96d311f3222061abf89f0d96be2b5721ed487520e56b0402d66f5f00a5d1bc4d",
+      "privacy_edits": [],
+      "source_note": "Original data chart, including reported Tesla T4 label. Historical chart annotations are archived claims, not newly validated speedups."
+    },
+    {
+      "path": "presentation/problem-size-table.png",
+      "category": "presentation-source-image",
+      "sha256": "cc0d804c9544aed035f88fe02069c605b1977202e70af875027efd8a821fcc92",
+      "size_bytes": 130635,
+      "source_slide": 20,
+      "source_media_part": "ppt/media/image36.png",
+      "source_document_sha256": "96d311f3222061abf89f0d96be2b5721ed487520e56b0402d66f5f00a5d1bc4d",
+      "privacy_edits": [],
+      "source_note": "Data-only embedded table image; original deck is kept private. No image content edits."
+    },
+    {
+      "path": "presentation/problem_sizes.csv",
+      "category": "presentation-transcription",
+      "sha256": "068923ddc4cab058720ddb6657e846cbaf6bd281fabb9da1ecdcb4f1130a728a",
+      "size_bytes": 1103,
+      "derived_from": "presentation/problem-size-table.png",
+      "privacy_edits": []
+    },
+    {
+      "path": "presentation/summary-table.png",
+      "category": "presentation-source-image",
+      "sha256": "62f21ffe4dce9cafae4c80c4e026504b570ae653e9840cf043f1a91b8b3dacd3",
+      "size_bytes": 146887,
+      "source_slide": 19,
+      "source_media_part": "ppt/media/image35.png",
+      "source_document_sha256": "96d311f3222061abf89f0d96be2b5721ed487520e56b0402d66f5f00a5d1bc4d",
+      "privacy_edits": [],
+      "source_note": "Data-only embedded table image; original deck is kept private. No image content edits."
+    },
+    {
+      "path": "presentation/summary.csv",
+      "category": "presentation-transcription",
+      "sha256": "1d68de8abfbc42ab5b534b6fddebc3bb9333dd98ac7e23606ea10289ceb5642f",
+      "size_bytes": 1095,
+      "derived_from": "presentation/summary-table.png",
+      "privacy_edits": []
+    },
+    {
       "path": "profiles/openmp/analysis_omp_16thread.txt",
       "category": "profiles",
       "archive_path": "airfoil_omp/output_prof/analysis_omp_16thread.txt",
@@ -474,5 +531,6 @@
       "derived_from": "source_log column; one observation per worker per campaign",
       "privacy_edits": []
     }
-  ]
+  ],
+  "presentation_policy": "Presentation-reported tables remain separate from raw-log campaigns. Raw shell timing logs, exact binaries and timing boundaries for these tables are not available; reported speedups are archived claims, not controlled measurements verified here."
 }

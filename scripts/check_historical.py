@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Verify archived file integrity and trace scaling data to raw logs.
+"""Verify archival integrity, raw-log summaries and presentation table structure.
 
 This checker only reads evidence. It never writes a manifest, changes a digest,
 regenerates CSV data, or merges independently archived scaling series.
+Presentation values were transcribed manually: image hashes protect that evidence,
+while this script checks structure rather than attempting OCR or proving timing
+comparability between independently archived tables.
 """
 
 from __future__ import annotations
@@ -35,6 +38,18 @@ DOMAIN = re.compile(r"^Global domain:\s*([1-9][0-9]*)\s*x\s*([1-9][0-9]*)\s*$")
 REAL = re.compile(r"^real[ \t]+([0-9]+)m([0-9]+)\.([0-9]{3})s[ \t]*$")
 POSITIVE_INTEGER = re.compile(r"^[1-9][0-9]*$")
 RATIO_TOLERANCE = Decimal("1e-12")
+CUDA_EVENT = re.compile(r"^Total GPU time:\s*([^\s]+)\s+ms\s*$")
+FINAL_STEP = re.compile(r"^Step\s+([0-9]+),\s*Time:\s*([^,\s]+),\s*Residual:\s*[^\s]+\s*$")
+PRESENTATION_SUMMARY_IMAGE = "presentation/summary-table.png"
+PRESENTATION_SIZE_IMAGE = "presentation/problem-size-table.png"
+PROBLEM_SIZES = {
+    "Small": (256, 64),
+    "Medium": (1024, 256),
+    "Large": (2048, 512),
+    "ExtraLarge": (4096, 1024),
+}
+SUMMARY_UNITS = {"serial": "core", "serial_opt": "core", "openmp": "thread",
+                 "mpi": "process", "cuda": "gpu"}
 
 
 class ArchiveError(ValueError):
@@ -222,6 +237,140 @@ def verify_scaling(directory: Path, manifest_names: set[str], csv_name: str,
     return len(records)
 
 
+
+def require_manifest_files(directory: Path, manifest_names: set[str], *names: str) -> None:
+    for name in names:
+        if name not in manifest_names:
+            raise ArchiveError(f"Evidence file is not covered by the manifest: {name}")
+        archive_path(directory, name)
+
+
+def read_csv(directory: Path, name: str, required: set[str]) -> list[dict[str, str]]:
+    with archive_path(directory, name).open(newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        columns = reader.fieldnames or []
+        if len(columns) != len(set(columns)) or not required.issubset(columns):
+            raise ArchiveError(f"{name} has missing or duplicate required columns")
+        rows = list(reader)
+    for index, row in enumerate(rows, start=2):
+        if None in row or any(row.get(key) is None for key in required):
+            raise ArchiveError(f"{name}: malformed CSV row at line {index}")
+    return rows
+
+
+def verify_cuda_timing(directory: Path, manifest_names: set[str]) -> int:
+    csv_name, source_log = "cuda_timing.csv", "cuda_steps.txt"
+    require_manifest_files(directory, manifest_names, csv_name, source_log)
+    rows = read_csv(directory, csv_name, {
+        "backend", "event_milliseconds", "event_seconds", "steps", "final_time",
+        "timing_scope", "source_log", "evidence",
+    })
+    if len(rows) != 1:
+        raise ArchiveError(f"{csv_name}: expected exactly one raw CUDA observation")
+    timings, finals = [], []
+    for line in archive_path(directory, source_log).read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        timing, final = CUDA_EVENT.fullmatch(line), FINAL_STEP.fullmatch(line)
+        if timing:
+            timings.append(positive_decimal(timing[1], "raw CUDA event milliseconds"))
+        elif line.startswith("Total GPU time"):
+            raise ArchiveError(f"{source_log}: malformed CUDA event timer")
+        if final:
+            finals.append((integer(final[1], "raw CUDA final steps"),
+                           positive_decimal(final[2], "raw CUDA final time")))
+    if len(timings) != 1 or len(finals) != 1:
+        raise ArchiveError(f"{source_log}: expected one CUDA event timer and one final step/time")
+    row = rows[0]
+    if (row["backend"], row["source_log"], row["timing_scope"]) != (
+            "cuda", source_log, "cuda_event_simulation_loop"):
+        raise ArchiveError(f"{csv_name}: CUDA backend, source log or timing scope differs")
+    milliseconds = positive_decimal(row["event_milliseconds"], "CUDA event milliseconds")
+    seconds = positive_decimal(row["event_seconds"], "CUDA event seconds")
+    if milliseconds != timings[0] or seconds != milliseconds / 1000:
+        raise ArchiveError(f"{csv_name}: event milliseconds/seconds differ from the raw event timer")
+    if (integer(row["steps"], "CUDA steps"),
+            positive_decimal(row["final_time"], "CUDA final time")) != finals[0]:
+        raise ArchiveError(f"{csv_name}: final steps/time differ from the raw log")
+    if not row["evidence"].strip():
+        raise ArchiveError(f"{csv_name}: evidence description must not be empty")
+    return 1
+
+
+def verify_presentation_summary(directory: Path, manifest_names: set[str]) -> int:
+    csv_name = "presentation/summary.csv"
+    require_manifest_files(directory, manifest_names, csv_name, PRESENTATION_SUMMARY_IMAGE)
+    rows = read_csv(directory, csv_name, {
+        "implementation", "workers", "worker_unit", "reported_real_seconds",
+        "reported_user_seconds", "reported_speedup", "reported_efficiency_percent",
+        "source_slide", "source_image",
+    })
+    expected = {("serial", 1), ("serial_opt", 1), ("cuda", 1)} | {
+        (backend, workers) for backend in ("openmp", "mpi") for workers in (1, 2, 4, 8, 16)
+    }
+    seen = set()
+    for row in rows:
+        backend = row["implementation"]
+        key = (backend, integer(row["workers"], "presentation summary workers"))
+        if key not in expected or key in seen:
+            raise ArchiveError(f"{csv_name}: unexpected or duplicate implementation/worker {key}")
+        seen.add(key)
+        if row["worker_unit"] != SUMMARY_UNITS[backend]:
+            raise ArchiveError(f"{csv_name}: {key} has an invalid recorded worker unit")
+        for name in ("reported_real_seconds", "reported_user_seconds", "reported_speedup"):
+            positive_decimal(row[name], f"{csv_name} {key} {name}")
+        efficiency = row["reported_efficiency_percent"]
+        if backend == "cuda":
+            if efficiency not in ("", "N/A"):
+                raise ArchiveError(f"{csv_name}: CUDA efficiency must retain the reported N/A value")
+        else:
+            positive_decimal(efficiency, f"{csv_name} {key} efficiency")
+        if backend == "serial" and (positive_decimal(row["reported_speedup"], "baseline speedup") != 1
+                or positive_decimal(efficiency, "baseline efficiency") != 100):
+            raise ArchiveError(f"{csv_name}: baseline must report speedup 1 and efficiency 100 percent")
+        if integer(row["source_slide"], "summary source slide") != 19 or row["source_image"] != PRESENTATION_SUMMARY_IMAGE:
+            raise ArchiveError(f"{csv_name}: source must be slide 19 and its archived summary image")
+    if seen != expected:
+        raise ArchiveError(f"{csv_name}: must contain all 13 recorded implementation/worker rows")
+    # Rounded reported ratios are preserved, not recalculated from other campaigns.
+    return len(rows)
+
+
+def verify_presentation_sizes(directory: Path, manifest_names: set[str]) -> int:
+    csv_name = "presentation/problem_sizes.csv"
+    require_manifest_files(directory, manifest_names, csv_name, PRESENTATION_SIZE_IMAGE)
+    rows = read_csv(directory, csv_name, {
+        "size_category", "nx", "ny", "total_cells", "backend", "workers",
+        "total_seconds", "reported_time_per_step", "source_slide", "source_image",
+    })
+    expected = {(category, backend) for category in PROBLEM_SIZES
+                for backend in ("openmp", "mpi", "cuda")}
+    seen = set()
+    for row in rows:
+        category, backend = row["size_category"], row["backend"]
+        key = (category, backend)
+        if key not in expected or key in seen:
+            raise ArchiveError(f"{csv_name}: unexpected or duplicate size/backend {key}")
+        seen.add(key)
+        nx, ny = integer(row["nx"], "size nx"), integer(row["ny"], "size ny")
+        if (nx, ny) != PROBLEM_SIZES[category]:
+            raise ArchiveError(f"{csv_name}: {category} grid differs from its recorded dimensions")
+        if integer(row["total_cells"], "total cells") != nx * ny:
+            raise ArchiveError(f"{csv_name}: {key} total_cells does not equal nx * ny")
+        if backend == "cuda":
+            if row["workers"] != "":
+                raise ArchiveError(f"{csv_name}: CUDA worker count was not recorded and must remain empty")
+        elif integer(row["workers"], "size workers") != 16:
+            raise ArchiveError(f"{csv_name}: CPU rows must record 16 workers")
+        for name in ("total_seconds", "reported_time_per_step"):
+            positive_decimal(row[name], f"{csv_name} {key} {name}")
+        if integer(row["source_slide"], "sizes source slide") != 20 or row["source_image"] != PRESENTATION_SIZE_IMAGE:
+            raise ArchiveError(f"{csv_name}: source must be slide 20 and its archived problem-size image")
+    if seen != expected:
+        raise ArchiveError(f"{csv_name}: must contain all 12 recorded size/backend rows")
+    # The table does not establish exact step counts or a shared timing campaign.
+    return len(rows)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--directory", type=Path,
@@ -237,10 +386,17 @@ def main() -> int:
                 rows += verify_scaling(directory, names, csv_name, sources)
             except ArchiveError as error:
                 raise ArchiveError(f"{csv_name}: {error}") from error
+        cuda_rows = verify_cuda_timing(directory, names)
+        summary_rows = verify_presentation_summary(directory, names)
+        size_rows = verify_presentation_sizes(directory, names)
     except (ArchiveError, OSError, ValueError, csv.Error, InvalidOperation) as error:
         print(f"FAIL historical evidence: {error}", file=sys.stderr)
         return 1
-    print(f"PASS historical evidence: {len(names)} file hashes and sizes; {rows} rows in 4 independent scaling series (2 CSV files).")
+    print(f"PASS historical evidence: {len(names)} file hashes and sizes; "
+          f"{rows} raw CPU rows in 4 independent scaling series; {cuda_rows} raw CUDA row; "
+          f"{summary_rows + size_rows} image-transcribed presentation rows "
+          f"({summary_rows} summary + {size_rows} problem-size). "
+          "Presentation image hashes and table structure checked; no OCR or cross-campaign ratio inference.")
     return 0
 
 
