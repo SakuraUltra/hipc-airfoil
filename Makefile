@@ -6,6 +6,7 @@ MPICC ?= mpicc
 NVCC ?= nvcc
 PYTHON ?= python3
 BUILD_DIR ?= build
+DEMO_DIR ?= out/demo
 CFLAGS ?= -O3 -g -std=c11 -Wall -Wextra
 CPPFLAGS ?=
 LDFLAGS ?=
@@ -32,7 +33,7 @@ SHARED_ARGS := $(BUILD_DIR)/serial/args.o $(BUILD_DIR)/openmp/args.o $(BUILD_DIR
 SHARED_VTK := $(BUILD_DIR)/serial/vtk.o $(BUILD_DIR)/openmp/vtk.o $(BUILD_DIR)/cuda/vtk.o
 SHARED_DATA := $(BUILD_DIR)/serial/data.o $(BUILD_DIR)/openmp/data.o
 
-.PHONY: all cpu serial openmp mpi cuda reference check check-historical validate info clean help
+.PHONY: all cpu serial openmp mpi cuda reference demo check check-historical validate info clean help
 all: cpu
 cpu: serial openmp
 serial: $(BUILD_DIR)/airfoil_serial $(BUILD_DIR)/airfoil_serial_opt
@@ -40,6 +41,9 @@ openmp: $(BUILD_DIR)/airfoil_openmp $(BUILD_DIR)/airfoil_openmp_opt
 mpi: $(BUILD_DIR)/airfoil_mpi
 cuda: $(BUILD_DIR)/airfoil_cuda
 reference: $(BUILD_DIR)/airfoil_reference
+
+demo: serial
+	$(PYTHON) scripts/demo.py --build-dir "$(BUILD_DIR)" --output-dir "$(DEMO_DIR)"
 
 $(SHARED_ARGS): common/args.c $(wildcard serial/*.h openmp/*.h cuda/*.h)
 	@mkdir -p $(@D)
@@ -112,6 +116,7 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 help:
+	@echo 'make demo       Run a verified CPU example and generate an offline result page'
 	@echo 'make cpu        Build serial and OpenMP variants (default)'
 	@echo 'make mpi        Build MPI variant (requires mpicc)'
 	@echo 'make cuda       Build CUDA variant (requires nvcc; CUDA_ARCH=75 by default)'

@@ -34,8 +34,10 @@ jobs:
         run: |
           make -j2 cpu mpi CC=${{ matrix.compiler }}
           make info CC=${{ matrix.compiler }}
-      - name: Comparator negative controls
+      - name: Verification-tool negative controls
         run: python3 -m unittest discover -s tests -v
+      - name: Generate the offline demonstration
+        run: make demo CC=${{ matrix.compiler }} DEMO_DIR=out/demo-${{ matrix.compiler }}
       - name: Numerical, checkpoint and CLI regressions
         run: python3 scripts/validate.py --mpi required --cuda skip --mpirun-arg=--oversubscribe --output-dir benchmarks/results/ci-${{ matrix.compiler }}
       - name: Address and undefined-behaviour sanitizers
@@ -55,6 +57,7 @@ jobs:
             benchmarks/results/ci-*/**/process.stderr.txt
             build/build-info.json
             build/sanitized/build-info.json
+            out/demo-${{ matrix.compiler }}/
           retention-days: 7
 
   cuda-compile:

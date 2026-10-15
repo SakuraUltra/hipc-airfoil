@@ -5,10 +5,14 @@
 Local Apple Silicon build: Apple Clang 15.0.0, Homebrew libomp 21.1.8 and
 Open MPI 5.0.11, C11, `-O3 -g -Wall -Wextra`, without fast-math.
 
-- **23 verification-tool tests passed.** Deliberately invalid field values,
+- **28 verification-tool tests passed.** Deliberately invalid field values,
   shapes, metadata, legacy associations and comparisons must fail. Runtime
   crashes and launcher failures cannot count as successful argument rejection;
   alternate build directories must use their own provenance.
+- The demo's five pipeline tests launch real fixture subprocesses and use the
+  strict field reader/comparator. They check timeout, corrupted output, a
+  mismatch in ghost storage, partial-render cleanup and preservation of earlier
+  successful runs. These fixtures test the harness, not CFD physics.
 - **84 solver regression cases passed** in the local maintained CPU/MPI suite.
   It compares 100 complete checkpoint/final output pairs with the corrected
   serial solver. Maximum recorded absolute field difference was approximately

@@ -17,6 +17,7 @@
 </p>
 
 <p align="center">
+  <a href="#one-command-demo">Try the demo</a> &nbsp;·&nbsp;
   <a href="#overview">Overview</a> &nbsp;·&nbsp;
   <a href="#implementations">Implementations</a> &nbsp;·&nbsp;
   <a href="#performance-evidence">Performance</a> &nbsp;·&nbsp;
@@ -24,6 +25,28 @@
   <a href="#validate-first">Validation</a> &nbsp;·&nbsp;
   <a href="#documentation">Documentation</a>
 </p>
+
+## One-command demo
+
+Run a small NACA 2412 simulation and open its results in your browser:
+
+```sh
+git clone https://github.com/SakuraUltra/hipc-airfoil.git
+cd hipc-airfoil
+make demo
+```
+
+Needs a **C11 compiler, Make and Python 3.10+** on macOS or Linux. No GPU,
+OpenMP runtime or Python packages are needed. The command builds both serial
+implementations, checks their complete velocity and pressure fields, and prints
+the path to an **offline `index.html`** with both field views and validation
+results. Open that file in your browser; it needs no web server or internet.
+
+Every invocation keeps a fresh `out/demo/run-*/` folder with the page, SVG figures,
+raw fields, logs and a JSON report. Failed runs retain diagnostic evidence and do
+not produce a success page. This short demonstration illustrates numerical
+agreement; it is not a performance benchmark or physical validation of the model.
+See the [demo guide](docs/DEMO.md) for prerequisites, output details and options.
 
 ## Overview
 
@@ -213,6 +236,7 @@ successful compilation does not establish GPU runtime correctness or speedup.**
 
 | Guide | What it covers |
 | --- | --- |
+| [One-command demo](docs/DEMO.md) | Offline field viewer, retained evidence and troubleshooting |
 | [Architecture](docs/ARCHITECTURE.md) | Solver stages, memory layouts, synchronization and boundaries |
 | [Validation](docs/VALIDATION.md) | Numerical checks, completed verification and runtime limits |
 | [Benchmark methodology](docs/BENCHMARKS.md) | Timing scopes, repeated measurements and figure reproduction |
