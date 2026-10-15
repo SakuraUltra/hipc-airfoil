@@ -28,7 +28,7 @@
 
 ## One-command demo
 
-Run a small NACA 2412 simulation and open its results in your browser:
+Run a NACA 2412 simulation and play its evolution in your browser:
 
 ```sh
 git clone https://github.com/SakuraUltra/hipc-airfoil.git
@@ -36,14 +36,21 @@ cd hipc-airfoil
 make demo
 ```
 
+![Actual transient velocity field near the airfoil](docs/assets/demo-flow.gif)
+
+*Preview: 41 actual saved states, 256×64 grid, TIME 0.001–0.4. The colour scale
+is fixed; grey marks excluded solid/boundary samples. [Preview source metadata](docs/assets/demo-flow.json).*
+
 Needs a **C11 compiler, Make and Python 3.10+** on macOS or Linux. No GPU,
 OpenMP runtime or Python packages are needed. The command builds both serial
-implementations, checks their complete velocity and pressure fields, and prints
-the path to an **offline `index.html`** with both field views and validation
-results. Open that file in your browser; it needs no web server or internet.
+implementations on a **256×64 grid**, checks their complete velocity and pressure
+fields at every saved time, and prints the path to an **offline `index.html`**.
+Play/pause the actual computed frames, scrub through time, switch velocity/pressure,
+or toggle the airfoil close-up and full domain. Open the file in your browser;
+it needs no web server or internet. Use `make demo-hd` for a finer **512×128 grid**.
 
 Every invocation keeps a fresh `out/demo/run-*/` folder with the page, SVG figures,
-raw fields, logs and a JSON report. Failed runs retain diagnostic evidence and do
+raw time-dependent fields, logs and a JSON report. Failed runs retain diagnostic evidence and do
 not produce a success page. This short demonstration illustrates numerical
 agreement; it is not a performance benchmark or physical validation of the model.
 See the [demo guide](docs/DEMO.md) for prerequisites, output details and options.

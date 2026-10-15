@@ -5,14 +5,24 @@
 Local Apple Silicon build: Apple Clang 15.0.0, Homebrew libomp 21.1.8 and
 Open MPI 5.0.11, C11, `-O3 -g -Wall -Wextra`, without fast-math.
 
-- **28 verification-tool tests passed.** Deliberately invalid field values,
+- **41 verification-tool tests passed.** Deliberately invalid field values,
   shapes, metadata, legacy associations and comparisons must fail. Runtime
   crashes and launcher failures cannot count as successful argument rejection;
   alternate build directories must use their own provenance.
-- The demo's five pipeline tests launch real fixture subprocesses and use the
-  strict field reader/comparator. They check timeout, corrupted output, a
-  mismatch in ghost storage, partial-render cleanup and preservation of earlier
-  successful runs. These fixtures test the harness, not CFD physics.
+- The demo's ten pipeline tests launch real fixture subprocesses and use the
+  strict field reader/comparator. They check timeout, corrupted output,
+  intermediate-frame errors even when the final result agrees, missing or
+  incorrectly timed checkpoints, frame limits, partial-render cleanup and
+  preservation of earlier successful runs. These fixtures test the harness,
+  not CFD physics.
+- Four geometry tests include a temporary C probe linked to the real solver
+  setup. Reconstructed plotting masks match every C fluid flag in ten cases,
+  including three resolutions, symmetric/cambered profiles, clipping and a
+  non-default domain. No velocity value is used to infer the obstacle.
+- Four viewer tests verify three controlled fixture states, fixed cross-frame
+  colour limits and source hashes. Independent PNG decoding checks sample
+  order, mask colours and staggered image placement in both views; invalid
+  intermediate comparisons, duplicate times and changed coordinates fail.
 - **84 solver regression cases passed** in the local maintained CPU/MPI suite.
   It compares 100 complete checkpoint/final output pairs with the corrected
   serial solver. Maximum recorded absolute field difference was approximately

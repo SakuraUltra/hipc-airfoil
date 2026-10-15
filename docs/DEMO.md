@@ -5,8 +5,8 @@ make demo
 ```
 
 This builds the maintained serial and serial-optimised executables, runs both on
-the same small NACA 2412 case, compares their full output and creates an offline
-result page. It does not build or run the OpenMP, MPI or CUDA backends.
+the same NACA 2412 case, compares their full output at each saved time and creates
+an offline animation. It does not build or run the OpenMP, MPI or CUDA backends.
 
 ## Prerequisites
 
@@ -28,9 +28,12 @@ all assets and evidence links are local to its run directory.
 
 | File | Contents |
 | --- | --- |
-| `index.html` | Field viewer, actual final simulation time and cycle, and numerical comparison |
-| `velocity.svg`, `pressure.svg` | Horizontal velocity and pressure figures generated from the actual optimised-serial output |
+| `index.html` | Play/pause, time slider, playback speed, velocity/pressure and close-up/full-domain controls |
+| `velocity.svg`, `pressure.svg` | Final horizontal velocity and pressure over the full domain |
+| `velocity-detail.svg`, `pressure-detail.svg` | Final fields in the airfoil close-up |
+| `frames/` | Compact animation images generated from actual saved solver fields |
 | `serial.vtr`, `serial-opt.vtr` | Complete final rectilinear-grid fields |
+| `serial-*.vtr`, `serial-opt-*.vtr` | Checkpoints, retained for every displayed time |
 | `serial.stdout.txt`, `serial.stderr.txt` | Reference process logs |
 | `serial-opt.stdout.txt`, `serial-opt.stderr.txt` | Optimised-serial process logs |
 | `report.json` | Settings, process outcomes and comparison errors/tolerances |
@@ -42,17 +45,30 @@ these before publishing a result directory.
 
 ## What the check establishes
 
-The default case uses 128×32 cells, a fixed timestep of 0.001 and a requested
-simulation end time of 0.2. Each solver has a 30-second process timeout. The page
-shows the `TIME` and `CYCLE` read from the generated fields, rather than inferring
-them from filenames.
+The default case uses 256×64 cells, a fixed timestep of 0.001 and a requested
+simulation end time of 0.4. It saves every 10 iterations plus the final result,
+giving 41 actual playback frames for the default case.
+Each solver has a 30-second process timeout. `make demo-hd` uses 512×128 cells
+and a 60-second timeout per solver; it computes more spatial detail rather than
+smoothing or enlarging the coarse solution.
+
+Playback uses the `TIME` and `CYCLE` read from each generated field. The first
+checkpoint is after the first update (normally TIME 0.001, CYCLE 0), not an
+invented time-zero frame. The slider advances between saved states; there is no
+temporal interpolation. Playback speed controls the viewing speed rather than
+the solver timestep. Reduced-motion preferences start the viewer paused, and
+the final static images remain accessible without JavaScript.
 
 The strict reader rejects malformed or non-finite fields. Validation requires
 matching coordinates, extent, time and cycle, then compares every velocity and
 pressure value, including ghost and obstacle storage. Both componentwise
 absolute/relative error and relative L2 error must pass the recorded tolerances.
 Plots show only the interior grid; horizontal velocity and pressure retain their
-different staggered-grid positions.
+different staggered-grid positions. Geometry marking is reconstructed from the
+solver's setup rules, with a test against actual C-generated flags. Grey marks
+solid or excluded boundary samples, whose stored values are not physical fluid
+measurements. All stored values still participate in the numerical comparison.
+Colour scales remain fixed over time and between the close-up and full view.
 
 An unsuccessful process, timeout, invalid output, failed comparison or rendering
 error exits with failure, keeps the report and available logs, and leaves no
@@ -69,11 +85,17 @@ The demo calculates no speedup. Historical performance measurements remain in th
 # Put generated runs somewhere else; this directory is not removed by make clean.
 make demo DEMO_DIR=out/my-demo
 
+# More actual spatial samples, with the same playback controls.
+make demo-hd
+
 # Build a separate serial pair with a different compiler.
 make demo CC=clang BUILD_DIR=build/demo-clang
 
 # After building serial, customise the bounded demonstration.
 python3 scripts/demo.py --nx 64 --ny 16 --end-time .05 --dt .001
+
+# Save more intermediate states (at most 64 displayed frames).
+python3 scripts/demo.py --frame-stride 8
 
 # Inspect all runner options.
 python3 scripts/demo.py --help

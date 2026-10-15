@@ -2,8 +2,9 @@
 """Run a small verified serial demonstration and create an offline result page.
 
 Only a C11-built serial pair and Python's standard library are required. Each
-invocation retains a fresh run directory, its full VTR fields, process logs and
-report.json. This functional demonstration does not calculate performance
+invocation retains a fresh run directory, its real checkpoint/final VTR fields,
+process logs and report.json. Every stored frame is checked before playback.
+This functional demonstration does not calculate performance
 speedups or provide benchmark evidence.
 """
 
@@ -42,11 +43,13 @@ def main() -> int:
     parser.add_argument("--build-dir", type=Path, default=root / "build")
     parser.add_argument("--output-dir", type=Path, default=root / "out" / "demo",
                         help="Parent directory; every invocation creates its own run-* directory")
-    parser.add_argument("--nx", type=int, default=128)
-    parser.add_argument("--ny", type=int, default=32)
+    parser.add_argument("--nx", type=int, default=256)
+    parser.add_argument("--ny", type=int, default=64)
     parser.add_argument("--airfoil", default="2412", help="Four-digit NACA profile")
-    parser.add_argument("--end-time", type=float, default=.2)
+    parser.add_argument("--end-time", type=float, default=.4)
     parser.add_argument("--dt", type=float, default=.001)
+    parser.add_argument("--frame-stride", type=int, default=10,
+                        help="Save a real checkpoint every N steps; at most 64 distinct playback frames")
     parser.add_argument("--timeout", type=float, default=30,
                         help="Per-process timeout in seconds, positive and at most 120 (default: 30)")
     args = parser.parse_args()
@@ -60,13 +63,26 @@ def main() -> int:
         parser.error("--end-time, --dt and --timeout must be finite and positive")
     if args.timeout > 120:
         parser.error("--timeout must not exceed 120 seconds for this bounded demonstration")
+    if not 1 <= args.frame_stride <= 2147483645:
+        parser.error("--frame-stride must be a positive integer no greater than 2,147,483,645")
     try:
         expected_steps, expected_time = fixed_step_budget(args.end_time, args.dt)
     except ValueError as error:
         parser.error(str(error))
+    expected_checkpoints = []
+    accumulated_time = 0.0
+    for iteration in range(expected_steps):
+        accumulated_time += args.dt
+        if iteration % args.frame_stride == 0:
+            expected_checkpoints.append((iteration, accumulated_time))
+    duplicate_final = expected_checkpoints[-1][0] == expected_steps - 1
+    expected_frames = len(expected_checkpoints) + (0 if duplicate_final else 1)
+    if expected_frames > 64:
+        parser.error("Playback is limited to 64 distinct frames; increase --frame-stride")
 
     settings = {"nx": args.nx, "ny": args.ny, "dt": args.dt,
-                "end_time": args.end_time, "airfoil": args.airfoil}
+                "end_time": args.end_time, "airfoil": args.airfoil,
+                "frame_stride": args.frame_stride}
     try:
         parent = args.output_dir.resolve()
         parent.mkdir(parents=True, exist_ok=True)
@@ -78,9 +94,10 @@ def main() -> int:
         "schema_version": 1, "created_utc": datetime.now(timezone.utc).isoformat(),
         "status": "running", "stage": "initialization", "settings": settings,
         "limits": {"estimated_fixed_steps": expected_steps, "per_process_timeout_seconds": args.timeout,
-                   "max_cells": 65536, "max_fixed_steps": 2000},
+                   "max_cells": 65536, "max_fixed_steps": 2000,
+                   "expected_playback_frames": expected_frames, "max_playback_frames": 64},
         "scope": "Functional numerical demonstration, not a performance benchmark; no speedups are calculated.",
-        "runs": [], "validation": None,
+        "runs": [], "validation": None, "frame_validations": [],
     }
     report_path = directory / "report.json"
     stage = "initialization"
@@ -93,7 +110,7 @@ def main() -> int:
             executable = build / EXECUTABLES[backend]
             options = ["-x", str(args.nx), "-y", str(args.ny), "-a", args.airfoil,
                        "-t", str(args.end_time), "-d", str(args.dt),
-                       "-f", "1000000000", "-o", backend]
+                       "-c", "-f", str(args.frame_stride), "-o", backend]
             # run_process also records launch errors and retains empty logs when
             # the executable is missing; do not drop that failure evidence.
             run = run_process([str(executable)] + options, directory, os.environ.copy(),
@@ -106,28 +123,74 @@ def main() -> int:
 
         stage = "validating numerical output"
         report.update(stage=stage)
-        grids = {name: read_grid(directory / f"{name}.vtr", strict=True) for name in ("serial", "serial-opt")}
         expected_extent = (0, args.nx + 1, 0, args.ny + 1, 0, 0)
-        for name, grid in grids.items():
-            if grid.extent != expected_extent:
-                raise ValueError(f"{name}: output extent does not match the requested grid")
-            if grid.cycle != expected_steps or not math.isclose(grid.time, expected_time, rel_tol=1e-12, abs_tol=1e-12):
-                raise ValueError(f"{name}: final TIME/CYCLE does not match the requested fixed-step simulation")
-        comparison = compare_grids(grids["serial"], grids["serial-opt"], atol=1e-8, rtol=1e-7, l2_rtol=1e-7)
-        report["validation"] = comparison
-        save_json(report_path, report)
-        if not comparison["passed"]:
-            raise ValueError("The complete serial and serial-opt fields do not match within the recorded tolerances")
+
+        def validate_pair(reference_name: str, candidate_name: str, cycle: int,
+                          time: float, kind: str) -> dict:
+            entry = {"kind": kind, "reference_file": reference_name,
+                     "candidate_file": candidate_name, "time": None, "cycle": None,
+                     "comparison": None, "status": "validating"}
+            report["frame_validations"].append(entry)
+            save_json(report_path, report)
+            try:
+                reference = read_grid(directory / reference_name, strict=True)
+                candidate = read_grid(directory / candidate_name, strict=True)
+                entry.update(time=candidate.time, cycle=candidate.cycle)
+                for name, grid in ((reference_name, reference), (candidate_name, candidate)):
+                    if grid.extent != expected_extent:
+                        raise ValueError(f"{name}: output extent does not match the requested grid")
+                    if grid.cycle != cycle or not math.isclose(grid.time, time, rel_tol=1e-12, abs_tol=1e-12):
+                        raise ValueError(f"{name}: TIME/CYCLE does not match the requested fixed-step simulation")
+                comparison = compare_grids(reference, candidate, atol=1e-8, rtol=1e-7, l2_rtol=1e-7)
+                entry["comparison"] = comparison
+                if kind == "final":
+                    # Preserve the existing report contract for final-state checks.
+                    report["validation"] = comparison
+                if not comparison["passed"]:
+                    raise ValueError(f"{candidate_name}: complete serial and serial-opt fields do not match within the recorded tolerances")
+                entry["status"] = "passed"
+                save_json(report_path, report)
+                return {"grid": candidate, "comparison": comparison}
+            except Exception as error:
+                entry.update(status="failed", error=f"{type(error).__name__}: {error}")
+                save_json(report_path, report)
+                raise
+
+        final_frame = validate_pair("serial.vtr", "serial-opt.vtr", expected_steps, expected_time, "final")
+        frames = []
+        for iteration, checkpoint_time in expected_checkpoints:
+            reference_name = f"serial-{iteration}.vtr"
+            candidate_name = f"serial-opt-{iteration}.vtr"
+            stage = f"validating checkpoint {reference_name} / {candidate_name}"
+            report.update(stage=stage)
+            frame = validate_pair(reference_name, candidate_name, iteration, checkpoint_time, "checkpoint")
+            if frames and frame["grid"].time <= frames[-1]["grid"].time:
+                raise ValueError(f"{candidate_name}: checkpoint TIME must increase strictly")
+            frames.append(frame)
+        if final_frame["grid"].time == frames[-1]["grid"].time:
+            # The last checkpoint can describe the same state with its loop
+            # index CYCLE; retain final metadata without duplicating playback.
+            frames[-1] = final_frame
+        elif final_frame["grid"].time > frames[-1]["grid"].time:
+            frames.append(final_frame)
+        else:
+            raise ValueError("Final TIME precedes the last checkpoint")
+        if len(frames) != expected_frames:
+            raise ValueError("The verified playback frame count differs from the bounded request")
+        report["frame_validations"].sort(key=lambda entry: (entry["time"], entry["cycle"]))
+        comparison = final_frame["comparison"]
+        final_grid = final_frame["grid"]
 
         stage = "rendering offline page"
         report.update(stage=stage)
         save_json(report_path, report)
         from demo_view import write_demo_page
-        page = Path(write_demo_page(directory, grids["serial-opt"], comparison, report["runs"], settings)).resolve()
+        page = Path(write_demo_page(directory, final_grid, comparison, report["runs"], settings, frames)).resolve()
         if page != directory / "index.html" or not page.is_file():
             raise ValueError("The renderer did not produce index.html in the current run directory")
         report.update(status="success", stage="complete", page="index.html",
-                      actual={"time": grids["serial-opt"].time, "cycle": grids["serial-opt"].cycle})
+                      actual={"time": final_grid.time, "cycle": final_grid.cycle,
+                              "playback_frames": len(frames), "stored_frame_pairs": len(report["frame_validations"])})
         save_json(report_path, report)
     except Exception as error:
         # A partly rendered page must never look like a completed demonstration.
@@ -142,7 +205,7 @@ def main() -> int:
             print(f"Failure report could not be saved: {report_error}", file=sys.stderr)
         print(f"Demo failed during {stage}: {error}\nEvidence retained: {directory}", file=sys.stderr)
         return 1
-    print("Verified serial and serial-opt fields; generated a functional demonstration, not a benchmark.")
+    print(f"Verified {len(report['frame_validations'])} complete frame pairs for {len(frames)} real playback frames; this is a functional demonstration, not a benchmark.")
     print(f"Open: {page}")
     print(f"Evidence: {report_path}")
     return 0

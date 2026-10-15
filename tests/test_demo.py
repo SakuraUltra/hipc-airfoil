@@ -16,7 +16,8 @@ from common import run_process
 
 
 # A tiny independent fixture: 4x4 requested cells, 6x6 ghost-inclusive points,
-# and exactly one timestep. No CFD executable or plotting dependency is needed.
+# with real fixed-step checkpoint numbering. No CFD executable or plotting
+# dependency is needed.
 FAKE_SOLVER = '''from pathlib import Path
 import sys
 import time
@@ -28,26 +29,43 @@ print("fixture solver diagnostic", file=sys.stderr, flush=True)
 if mode == "timeout":
     time.sleep(10)
 base = sys.argv[sys.argv.index("-o") + 1]
-path = Path(base + ".vtr")
-if mode == "malformed":
-    path.write_text("<VTKFile><broken>")
-    sys.exit(0)
-root = ET.Element("VTKFile", type="RectilinearGrid")
-grid = ET.SubElement(root, "RectilinearGrid", WholeExtent="0 5 0 5 0 0")
-metadata = ET.SubElement(grid, "FieldData")
-ET.SubElement(metadata, "DataArray", Name="TIME", format="ascii").text = "0.001"
-ET.SubElement(metadata, "DataArray", Name="CYCLE", format="ascii").text = "1"
-piece = ET.SubElement(grid, "Piece", Extent="0 5 0 5 0 0")
-coordinates = ET.SubElement(piece, "Coordinates")
-for name, values in (("X", "0 1 2 3 4 5"), ("Y", "0 1 2 3 4 5"), ("Z", "0")):
-    ET.SubElement(coordinates, "DataArray", Name=name, format="ascii").text = values
-fields = ET.SubElement(piece, "PointData")
-ET.SubElement(fields, "DataArray", Name="uv", NumberOfComponents="3", format="ascii").text = " ".join(["1", "0", "0"] * 36)
-pressure = ["0"] * 36
-if mode == "mismatch":
-    pressure[-1] = "2"
-ET.SubElement(fields, "DataArray", Name="p", format="ascii").text = " ".join(pressure)
-ET.ElementTree(root).write(path)
+end = float(sys.argv[sys.argv.index("-t") + 1])
+dt = float(sys.argv[sys.argv.index("-d") + 1])
+stride = int(sys.argv[sys.argv.index("-f") + 1])
+
+def write(path, cycle, value_time, final=False):
+    if mode == "missing_checkpoint" and not final and cycle == 2:
+        return
+    if mode == "malformed" and final:
+        path.write_text("<VTKFile><broken>")
+        return
+    root = ET.Element("VTKFile", type="RectilinearGrid")
+    grid = ET.SubElement(root, "RectilinearGrid", WholeExtent="0 5 0 5 0 0")
+    metadata = ET.SubElement(grid, "FieldData")
+    if mode == "wrong_checkpoint_time" and not final and cycle == 2:
+        value_time += .001
+    ET.SubElement(metadata, "DataArray", Name="TIME", format="ascii").text = repr(value_time)
+    ET.SubElement(metadata, "DataArray", Name="CYCLE", format="ascii").text = str(cycle)
+    piece = ET.SubElement(grid, "Piece", Extent="0 5 0 5 0 0")
+    coordinates = ET.SubElement(piece, "Coordinates")
+    for name, values in (("X", "0 1 2 3 4 5"), ("Y", "0 1 2 3 4 5"), ("Z", "0")):
+        ET.SubElement(coordinates, "DataArray", Name=name, format="ascii").text = values
+    fields = ET.SubElement(piece, "PointData")
+    ET.SubElement(fields, "DataArray", Name="uv", NumberOfComponents="3", format="ascii").text = " ".join(["1", "0", "0"] * 36)
+    pressure = ["0"] * 36
+    if (mode == "mismatch" and final) or (mode == "intermediate_mismatch" and not final and cycle == 2):
+        pressure[-1] = "2"
+    ET.SubElement(fields, "DataArray", Name="p", format="ascii").text = " ".join(pressure)
+    ET.ElementTree(root).write(path)
+
+value_time = 0.0
+iteration = 0
+while value_time < end:
+    value_time += dt
+    if "-c" in sys.argv and iteration % stride == 0:
+        write(Path(base + "-" + str(iteration) + ".vtr"), iteration, value_time)
+    iteration += 1
+write(Path(base + ".vtr"), iteration, value_time, final=True)
 '''
 
 
@@ -72,12 +90,13 @@ class DemoEvidenceTests(unittest.TestCase):
         page.write_text("<!doctype html><title>Verified fixture result</title>")
         return page
 
-    def invoke(self, *, timeout=3, renderer=None):
+    def invoke(self, *, timeout=3, renderer=None, end_time=.001, frame_stride=20):
         module = ModuleType("demo_view")
         module.write_demo_page = Mock(side_effect=renderer or self.render_page)
         arguments = ["demo.py", "--build-dir", str(self.build),
                      "--output-dir", str(self.output), "--nx", "4", "--ny", "4",
-                     "--end-time", "0.001", "--dt", "0.001", "--timeout", str(timeout)]
+                     "--end-time", str(end_time), "--dt", "0.001", "--timeout", str(timeout),
+                     "--frame-stride", str(frame_stride)]
 
         # Use the active Python interpreter, independent of shebang/PATH details.
         # The real process runner still launches, times out and retains all logs.
@@ -160,6 +179,58 @@ class DemoEvidenceTests(unittest.TestCase):
         self.assertTrue(report["validation"]["passed"])
         self.assertIn("renderer fixture failed", report["error"])
         renderer.assert_called_once()
+
+    def test_intermediate_mismatch_rejects_playback_even_when_final_agrees(self):
+        self.solver("serial-opt", "intermediate_mismatch")
+        status, renderer = self.invoke(end_time=.005, frame_stride=2)
+        self.assertNotEqual(status, 0)
+        _, report = self.assert_failed("validating checkpoint serial-2.vtr / serial-opt-2.vtr", 2)
+        self.assertTrue(report["validation"]["passed"], "The final-only check deliberately passes this negative control")
+        failed = [frame for frame in report["frame_validations"] if frame["status"] == "failed"]
+        self.assertEqual(len(failed), 1)
+        self.assertEqual(failed[0]["candidate_file"], "serial-opt-2.vtr")
+        self.assertFalse(failed[0]["comparison"]["passed"])
+        self.assertEqual(failed[0]["comparison"]["fields"]["p"]["max_abs_error"], 2)
+        renderer.assert_not_called()
+
+    def test_missing_expected_checkpoint_cannot_be_replaced_by_other_prefix(self):
+        self.solver("serial-opt", "missing_checkpoint")
+        status, renderer = self.invoke(end_time=.005, frame_stride=2)
+        self.assertNotEqual(status, 0)
+        path, report = self.assert_failed("validating checkpoint serial-2.vtr / serial-opt-2.vtr", 2)
+        self.assertTrue(report["validation"]["passed"])
+        self.assertTrue((path / "serial-2.vtr").is_file())
+        self.assertFalse((path / "serial-opt-2.vtr").exists())
+        self.assertEqual(report["frame_validations"][-1]["status"], "failed")
+        renderer.assert_not_called()
+
+    def test_checkpoint_metadata_time_is_checked_against_real_accumulation(self):
+        self.solver("serial-opt", "wrong_checkpoint_time")
+        status, renderer = self.invoke(end_time=.005, frame_stride=2)
+        self.assertNotEqual(status, 0)
+        _, report = self.assert_failed("validating checkpoint serial-2.vtr / serial-opt-2.vtr", 2)
+        self.assertIn("TIME/CYCLE", report["error"])
+        renderer.assert_not_called()
+
+    def test_real_checkpoint_times_and_duplicate_final_are_preserved_correctly(self):
+        status, renderer = self.invoke(end_time=.005, frame_stride=2)
+        self.assertEqual(status, 0)
+        _, report = self.retained(1)[0]
+        self.assertEqual(len(report["frame_validations"]), 4, "Three checkpoints plus final must all be validated")
+        self.assertTrue(all(frame["status"] == "passed" for frame in report["frame_validations"]))
+        frames = renderer.call_args.args[5]
+        self.assertEqual([frame["grid"].time for frame in frames], [.001, .003, .005])
+        self.assertEqual([frame["grid"].cycle for frame in frames], [0, 2, 5])
+        self.assertEqual(report["actual"]["playback_frames"], 3)
+        self.assertEqual(report["actual"]["stored_frame_pairs"], 4)
+
+    def test_playback_frame_budget_and_positive_stride_are_enforced(self):
+        for stride, end_time in ((0, .005), (1, .1)):
+            with self.subTest(stride=stride, end_time=end_time):
+                with self.assertRaises(SystemExit) as caught:
+                    self.invoke(end_time=end_time, frame_stride=stride)
+                self.assertEqual(caught.exception.code, 2)
+        self.assertFalse(self.output.exists(), "Reject excessive playback before creating output")
 
     def test_repeated_success_retains_both_runs_without_overwriting(self):
         first_status, first_renderer = self.invoke()
