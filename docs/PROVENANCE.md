@@ -102,8 +102,7 @@ licence granting redistribution was found in the available source files, and
 this repository does not grant a new licence over that material. Parallelisation
 and subsequent maintenance do not establish ownership of the underlying code.
 
-Public release of material without a verified licence requires confirmation of
-the applicable licence or permission from its rights holder. Repository
-visibility should remain private until that is established. This provenance
-record is not a licensing grant or a claim that permission has already been
-obtained.
+The repository's visibility does not change these recorded source terms.
+No new licence grant over the inherited material is added here. This provenance
+record documents the available source information; it does not assert that
+additional upstream permissions have been obtained.

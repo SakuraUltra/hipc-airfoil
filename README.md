@@ -1,22 +1,51 @@
-# Airfoil CFD: parallel computing on CPUs and GPUs
+<p align="center">
+  <img src="docs/assets/hero.svg" alt="Airfoil CFD: parallel computing on CPUs and GPUs" width="100%">
+</p>
 
-[![Build and validate](https://github.com/SakuraUltra/hipc-airfoil/actions/workflows/ci.yml/badge.svg)](https://github.com/SakuraUltra/hipc-airfoil/actions/workflows/ci.yml)
+<p align="center">
+  <strong>A two-dimensional flow solver with OpenMP, MPI and custom CUDA kernels.</strong><br>
+  Numerical checks, inspectable measurements and reproducible builds.
+</p>
 
-A two-dimensional NACA-airfoil CFD application, parallelised using
-**OpenMP, MPI and custom CUDA kernels**. This repository focuses on work
-decomposition, data dependencies, numerical agreement and reproducible performance
-measurement.
+<p align="center">
+  <a href="https://github.com/SakuraUltra/hipc-airfoil/actions/workflows/ci.yml"><img src="https://github.com/SakuraUltra/hipc-airfoil/actions/workflows/ci.yml/badge.svg" alt="Build and validate"></a>
+  <img src="https://img.shields.io/badge/C-11-2166A7?logo=c&logoColor=white" alt="C11">
+  <img src="https://img.shields.io/badge/OpenMP-shared_memory-2166A7" alt="OpenMP shared memory">
+  <img src="https://img.shields.io/badge/MPI-distributed_memory-C76319" alt="MPI distributed memory">
+  <img src="https://img.shields.io/badge/CUDA-C%2B%2B17-596D33?logo=nvidia&logoColor=white" alt="CUDA C++17">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10 or newer">
+</p>
 
-The project extends an existing serial finite-difference solver with CPU and GPU
-parallel implementations, numerical validation tools and inspectable benchmark
-evidence. [Provenance](docs/PROVENANCE.md) distinguishes the upstream serial
-reference, archived implementations and maintained code.
+<p align="center">
+  <a href="#overview">Overview</a> &nbsp;·&nbsp;
+  <a href="#implementations">Implementations</a> &nbsp;·&nbsp;
+  <a href="#performance-evidence">Performance</a> &nbsp;·&nbsp;
+  <a href="#build-and-run">Quickstart</a> &nbsp;·&nbsp;
+  <a href="#validate-first">Validation</a> &nbsp;·&nbsp;
+  <a href="#documentation">Documentation</a>
+</p>
 
-![Actual horizontal velocity output from the maintained serial solver](docs/assets/velocity.png)
+## Overview
+
+This project explores how a NACA-airfoil CFD solver maps onto shared-memory
+CPUs, distributed-memory processes and GPUs. It extends an existing serial
+finite-difference implementation with parallel backends, numerical comparison
+tools and traceable historical performance evidence.
+
+| Parallel computing | Numerical checks | Performance evidence |
+| --- | --- | --- |
+| OpenMP loops, MPI halo exchange and CUDA stencil kernels | Complete velocity/pressure fields, checkpoints and uneven decompositions | Original logs, checked tables, reproducible figures and explicit timing scopes |
+
+<p align="center">
+  <img src="docs/assets/velocity.png" alt="Horizontal velocity field from the maintained NACA 2412 solver" width="850">
+</p>
 
 *Actual maintained-solver output: NACA 2412, 256×64 cells, fixed timestep 0.001,
 simulation time 0.200. This is a diagnostic illustration, not physical validation
 of the CFD model.*
+
+[Source provenance](docs/PROVENANCE.md) distinguishes the inherited serial
+reference, archived implementations and maintained code.
 
 ## Implementations
 
@@ -32,72 +61,6 @@ of the CFD model.*
 All maintained variants retain the same solver stages and inherited velocity
 update ranges. See [architecture](docs/ARCHITECTURE.md) for synchronization,
 boundary treatment and limitations.
-
-## Build and run
-
-Core requirements: a C11 compiler, GNU Make and **Python 3.10+**. Python validation
-and benchmark tools use only the standard library. OpenMP requires a supporting
-compiler/runtime; MPI requires an MPI implementation. CUDA builds require a
-Linux CUDA toolkit with `nvcc`; executing them requires a compatible NVIDIA GPU.
-
-Ubuntu:
-
-```sh
-sudo apt-get install build-essential python3 openmpi-bin libopenmpi-dev
-make -j4 cpu mpi
-make info
-```
-
-macOS with Apple Clang and Homebrew:
-
-```sh
-brew install libomp open-mpi
-make -j4 cpu mpi
-make info
-```
-
-The Makefile detects Apple Clang and the Homebrew `libomp` path. Linux defaults
-to `-fopenmp`. Override `CC`, `MPICC`, `CFLAGS`, `BUILD_DIR` or OpenMP flags as
-needed; use a fresh `BUILD_DIR` when changing toolchain options.
-
-```sh
-# A short, inspectable simulation; output directories are created automatically.
-./build/airfoil_serial -x 128 -y 32 -t .02 -d .001 -o out/serial
-OMP_NUM_THREADS=4 ./build/airfoil_openmp_opt -x 128 -y 32 -t .02 -d .001 -o out/openmp
-mpirun -n 4 ./build/airfoil_mpi -x 128 -y 32 -t .02 -d .001 -o out/mpi
-
-# Compile on a CUDA-equipped Linux host; set the actual target capability.
-make cuda CUDA_ARCH=75
-./build/airfoil_cuda -x 128 -y 32 -t .02 -d .001 -o out/cuda
-```
-
-`--help` lists all options. `-d` selects a fixed timestep; omitting it enables
-CFL control. `-c -f 2` enables checkpoints; `-n` / `--noio` disables file output.
-Choosing a stable fixed timestep remains the caller's responsibility.
-
-## Validate first
-
-```sh
-make check
-# Require MPI rather than silently skipping an unbuilt executable:
-python3 scripts/validate.py --mpi required --cuda skip
-# On an NVIDIA GPU, require actual CUDA execution too:
-python3 scripts/validate.py --mpi required --cuda required
-
-python3 scripts/compare_vtk.py out/serial.vtr out/mpi.vtr --strict
-```
-
-Validation compares **complete finite velocity and pressure arrays**, matching
-grid coordinates, simulation time and cycle. It includes checkpoints, odd and
-uneven decompositions, single-column MPI slabs, symmetric airfoils, adaptive
-timesteps and invalid arguments. Optional backends are visibly skipped when
-their executables are absent; an existing executable with a broken runtime fails.
-Logs and field comparisons are retained for failed runs.
-
-Local CPU/MPI regression and tool-test results are recorded in
-[validation](docs/VALIDATION.md). CI builds/tests CPU and MPI with GCC and Clang,
-runs Linux sanitizers, and compiles CUDA separately. **The CUDA CI job has no GPU:
-successful compilation does not establish GPU runtime correctness or speedup.**
 
 ## Performance evidence
 
@@ -180,6 +143,83 @@ inspectable. Short smoke runs verify the harness; meaningful scaling results
 need representative workloads and controlled hardware. See
 [benchmark methodology](docs/BENCHMARKS.md) before interpreting the numbers.
 
+## Build and run
+
+Core requirements: a C11 compiler, GNU Make and **Python 3.10+**. Python validation
+and benchmark tools use only the standard library. OpenMP requires a supporting
+compiler/runtime; MPI requires an MPI implementation. CUDA builds require a
+Linux CUDA toolkit with `nvcc`; executing them requires a compatible NVIDIA GPU.
+
+Ubuntu:
+
+```sh
+sudo apt-get install build-essential python3 openmpi-bin libopenmpi-dev
+make -j4 cpu mpi
+make info
+```
+
+macOS with Apple Clang and Homebrew:
+
+```sh
+brew install libomp open-mpi
+make -j4 cpu mpi
+make info
+```
+
+The Makefile detects Apple Clang and the Homebrew `libomp` path. Linux defaults
+to `-fopenmp`. Override `CC`, `MPICC`, `CFLAGS`, `BUILD_DIR` or OpenMP flags as
+needed; use a fresh `BUILD_DIR` when changing toolchain options.
+
+```sh
+# A short, inspectable simulation; output directories are created automatically.
+./build/airfoil_serial -x 128 -y 32 -t .02 -d .001 -o out/serial
+OMP_NUM_THREADS=4 ./build/airfoil_openmp_opt -x 128 -y 32 -t .02 -d .001 -o out/openmp
+mpirun -n 4 ./build/airfoil_mpi -x 128 -y 32 -t .02 -d .001 -o out/mpi
+
+# Compile on a CUDA-equipped Linux host; set the actual target capability.
+make cuda CUDA_ARCH=75
+./build/airfoil_cuda -x 128 -y 32 -t .02 -d .001 -o out/cuda
+```
+
+`--help` lists all options. `-d` selects a fixed timestep; omitting it enables
+CFL control. `-c -f 2` enables checkpoints; `-n` / `--noio` disables file output.
+Choosing a stable fixed timestep remains the caller's responsibility.
+
+## Validate first
+
+```sh
+make check
+# Require MPI rather than silently skipping an unbuilt executable:
+python3 scripts/validate.py --mpi required --cuda skip
+# On an NVIDIA GPU, require actual CUDA execution too:
+python3 scripts/validate.py --mpi required --cuda required
+
+python3 scripts/compare_vtk.py out/serial.vtr out/mpi.vtr --strict
+```
+
+Validation compares **complete finite velocity and pressure arrays**, matching
+grid coordinates, simulation time and cycle. It includes checkpoints, odd and
+uneven decompositions, single-column MPI slabs, symmetric airfoils, adaptive
+timesteps and invalid arguments. Optional backends are visibly skipped when
+their executables are absent; an existing executable with a broken runtime fails.
+Logs and field comparisons are retained for failed runs.
+
+Local CPU/MPI regression and tool-test results are recorded in
+[validation](docs/VALIDATION.md). CI builds/tests CPU and MPI with GCC and Clang,
+runs Linux sanitizers, and compiles CUDA separately. **The CUDA CI job has no GPU:
+successful compilation does not establish GPU runtime correctness or speedup.**
+
+## Documentation
+
+| Guide | What it covers |
+| --- | --- |
+| [Architecture](docs/ARCHITECTURE.md) | Solver stages, memory layouts, synchronization and boundaries |
+| [Validation](docs/VALIDATION.md) | Numerical checks, completed verification and runtime limits |
+| [Benchmark methodology](docs/BENCHMARKS.md) | Timing scopes, repeated measurements and figure reproduction |
+| [Historical data](benchmarks/historical/README.md) | Original campaigns, profiles, source tables and integrity checks |
+| [Presentation evidence](benchmarks/historical/presentation/README.md) | Reported problem-size results and their source images |
+| [Provenance](docs/PROVENANCE.md) | Inherited code, subsequent changes and attribution |
+
 ## Repository map
 
 ```text
@@ -201,8 +241,8 @@ field dumps, input archives and personal machine paths are omitted.
 
 ## Attribution and distribution
 
-The supplied CFD scheme follows Griebel, Dornseifer and Neunhoeffer,
+The inherited CFD scheme follows Griebel, Dornseifer and Neunhoeffer,
 *Numerical Simulation in Fluid Dynamics* (SIAM, 1998). Upstream code retains
-its original authorship. No redistribution licence was included in the supplied
-archive; this repository makes no new licence grant over that material. Public
-release requires confirmation of the applicable upstream code permissions. See [provenance](docs/PROVENANCE.md).
+its original authorship. A redistribution licence was not included in the
+supplied archive, and this repository adds no new licence grant over that
+material. See [source provenance](docs/PROVENANCE.md) for details.
